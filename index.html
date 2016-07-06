@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<title>Arosenius Admin</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div id="appView"></div>
+
+<script type="text/template" id="appTemplate">
+	<div class="main-header">
+		<div class="container">
+
+			<div class="row">
+					
+				<div class="twelve columns">
+					<h4 class="u-pull-left" style="margin-right: 20px; margin-bottom: 0;">Arosenius Data Admin</h4>
+
+					<div class="u-pull-right">
+						<a class="button button-primary" href="#documents">Documents</a>
+						<a class="button button-primary" href="#bundles">Bundles</a>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="container main-content">
+
+		<div id="viewContainer" class="view-container"></div>
+
+	</div>
+
+	<div class="overlay-container"></div>
+
+</script>
+
+<script type="text/template" id="bundleListTemplate">
+
+	<% _.each(models, function(model) { %>
+		<tr data-id="<%= model.get('bundle') %>">
+			<td><input data-id="<%= model.get('bundle') %>" class="item-check" type="checkbox"/></td>
+			<td><a class="row-name" href="#bundle/<%= model.get('bundle') %>"><%= model.get('bundle') %></a></td>
+			<td><a class="row-name" href="#bundle/<%= model.get('bundle') %>"><%= model.get('title') %></a></td>
+		</tr>
+	<% }); %>
+
+</script>
+
+<script type="text/template" id="bundleListViewTemplate">
+	<div class="row">
+
+		<div class="twelve columns">
+
+			<table class="u-full-width">
+
+				<thead>
+					<tr>
+						<th width="5%"><div class="check-all"></div></th>
+						<th width="20%"><a class="column-sort" href="#" data-sort="name">Bundle</a></th>
+						<th width="75%"><a class="column-sort" href="#" data-sort="name">Title</a></th>
+					</tr>
+				</thead>
+
+				<tbody class="list-container">
+
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="four columns">
+					<a class="button prev">Prev</a>
+					<a class="button next">Next</a>
+					<span class="page-info"></span>
+				</div>
+				<div class="eight columns">
+					<div style="display: none" class="combine-controls">
+						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
+						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
+					</div>
+					<input type="text" class="search-input u-pull-right" placeholder="Search">
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="documentListTemplate">
+
+	<% _.each(models, function(model) { %>
+		<tr data-id="<%= model.get('id') %>">
+			<td><input data-id="<%= model.get('id') %>" class="item-check" type="checkbox"/></td>
+			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('title') %></a></td>
+			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('subtitle') %></a></td>
+			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('type') %></a></td>
+			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('collection').museum %></a></td>
+		</tr>
+	<% }); %>
+
+</script>
+
+<script type="text/template" id="documentListViewTemplate">
+	<div class="row">
+
+		<div class="twelve columns">
+
+			<table class="u-full-width">
+
+				<thead>
+					<tr>
+						<th width="5%"><div class="check-all"></div></th>
+						<th width="35%"><a class="column-sort" href="#" data-sort="name">Title</a></th>
+						<th width="25%"><a class="column-sort" href="#" data-sort="subtitle">Subtitle</a></th>
+						<th width="10%"><a class="column-sort" href="#" data-sort="type">Type</a></th>
+						<th width="25%"><a class="column-sort" href="#" data-sort="museum">Museum</a></th>
+					</tr>
+				</thead>
+
+				<tbody class="list-container">
+
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</div>
+
+	<div class="floating-toolbar">
+		<a class="toolbar-item viewmode-button" data-viewmode="list">List</a>
+		<a class="toolbar-item viewmode-button" data-viewmode="grid">Grid</a>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="four columns">
+					<a class="button prev">Prev</a>
+					<a class="button next">Next</a>
+					<span class="page-info"></span>
+				</div>
+				<div class="eight columns">
+					<div style="display: none" class="combine-controls">
+						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
+						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
+					</div>
+					<input type="text" class="search-input u-pull-right" placeholder="Search">
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="documentGridTemplate">
+
+	<% _.each(models, function(model) { %>
+		<a class="grid-item" href="#document/<%= model.get('id') %>" data-id="<%= model.get('id') %>" style="background-image: url('http://127.0.0.1:3000/images/255x/<%= model.get('image')+'.jpg' %>')">
+			<div class="item-title"><%= model.get('title') %></div>
+		</a>
+	<% }); %>
+
+	<div class="u-cf"></div>
+
+</script>
+
+<script type="text/template" id="documentGridViewTemplate">
+	<div class="row">
+
+		<div class="twelve columns">
+
+			<div class="list-container grid-container"></div>
+
+		</div>
+
+	</div>
+
+	<div class="floating-toolbar">
+		<a class="toolbar-item viewmode-button" data-viewmode="list">List</a>
+		<a class="toolbar-item viewmode-button" data-viewmode="grid">Grid</a>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="four columns">
+					<a class="button prev">Prev</a>
+					<a class="button next">Next</a>
+					<span class="page-info"></span>
+				</div>
+				<div class="eight columns">
+					<div style="display: none" class="combine-controls">
+						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
+						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
+					</div>
+					<input type="text" class="search-input u-pull-right" placeholder="Search">
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="documentViewTemplate">
+
+	<div class="row">
+		<div class="twelve columns">
+			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
+			<h5><%= model.get('subtitle') %></h5>
+		</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="eight columns">
+
+			<div class="row">
+				<div class="six columns">
+					<label for="titleInput">Title:</label>
+					<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput">
+
+					<label for="subtitleInput">Subtitle:</label>
+					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= model.get('subtitle') %>" id="subtitleInput">
+				</div>
+
+				<div class="six columns">
+					<label for="descriptionInput">Tags:</label>
+					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="tags" data-formatter="nl-array"><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="twelve columns">
+					<label for="descriptionInput">Description:</label>
+					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
+				</div>
+			</div>
+
+			<hr/>
+
+			<h5>Source museum</h5>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="collMuseumInput">Museum:</label>
+					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= model.get('collection').museum %>" id="collMuseumInput">
+				</div>
+				<div class="six columns">
+					<label for="collDepartmentInput">Department:</label>
+					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="department" value="<%= model.get('collection').department %>" id="collDepartmentInput">
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="collArchiveItemTitleInput">Archive item title:</label>
+					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="archive_item.title" value="<%= model.get('collection') && model.get('collection').archive_item ? model.get('collection').archive_item.title : '' %>" id="collArchiveItemTitleInput">
+				</div>
+				<div class="six columns">
+					<label for="collArchiveItemLocationInput">Archive item location:</label>
+					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="archive_item.archive_physloc" value="<%= model.get('collection') && model.get('collection').archive_item ? model.get('collection').archive_item.archive_physloc : '' %>" id="collArchiveItemLocationInput">
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="twelve columns">
+					<label>Museum internal id:</label>
+					<p><%= model.get('museum_int_id').join(', ') %></p>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="four columns">
+			<label>Image:</label>
+			<img src="http://127.0.0.1:3000/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/>
+
+			<% if (model.get('color')) { %>
+				<div class="row">
+					<div class="twelve">
+						<br/><br/><label>Dominant color:</label>
+						<div class="color-list">
+							<div class="color" style="background-color: <%= model.get('color').dominant.hex %>"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="six columns">
+
+						<label>Color palette:</label>
+						<div class="color-list">
+							<% _.each(model.get('color').colors.five, function(color) { %>
+								<div class="color" style="background-color: <%= color.hex %>"></div>
+							<% }) %>
+						</div>
+
+					</div>
+					<div class="six columns">
+
+						<label>Color palette (mapped):</label>
+						<div class="color-list">
+							<% _.each(model.get('color').colors.five_mapped, function(color) { %>
+								<div class="color" style="background-color: <%= color.hex %>"></div>
+							<% }) %>
+						</div>
+
+					</div>
+				</div>
+
+			<% } %>
+		</div>
+
+	</div>
+
+	<hr/>
+
+	<h5>Artwork</h5>
+
+	<div class="row">
+		<div class="six columns">
+			<label for="typeInput">Type:</label>
+			<input class="u-full-width" type="text" data-bind="type" value="<%= model.get('type') %>" id="typeInput">
+		</div>
+		<div class="six columns">
+			<label for="bundleInput">Bundle:</label>
+			<input class="u-full-width" type="text" data-bind="bundle" value="<%= model.get('bundle') %>" id="bundleInput">
+			<a href="#bundle/<%= model.get('bundle') %>">View bundle</a><br/><br/>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="six columns">
+			<label for="technicInput">Technic:</label>
+			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="value" value="<%= model.get('technic') ? model.get('technic').value : '' %>" id="technicInput">
+		</div>
+		<div class="six columns">
+			<label for="technicCommentInput">Technic comment:</label>
+			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="comment" value="<%= model.get('technic') ? model.get('technic').comment : '' %>" id="technicCommentInput">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="six columns">
+			<label for="technicMaterialInput">Material:</label>
+			<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="material" data-formatter="nl-array"><%= model.get('material')? model.get('material').join('\n') : '' %></textarea>
+		</div>
+		<div class="six columns">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="four columns">
+			<label for="innerWidthInput">Inner width:</label>
+			<input class="u-full-width" type="text" data-bind="format" data-bind-key="inner.width" value="<%= model.get('format') && model.get('format').inner ? model.get('format').inner.width : '' %>" id="innerWidthInput">
+		</div>
+		<div class="four columns">
+			<label for="innerHeightInput">Inner height:</label>
+			<input class="u-full-width" type="text" data-bind="format" data-bind-key="inner.height" value="<%= model.get('format') && model.get('format').inner ? model.get('format').inner.height : '' %>" id="innerHeightInput">
+		</div>
+		<div class="four columns">
+			<label for="innerUnitInput">Inner dimensions unit:</label>
+			<input class="u-full-width" type="text" data-bind="format" data-bind-key="inner.unit" value="<%= model.get('format') && model.get('format').inner ? model.get('format').inner.unit : '' %>" id="innerUnitInput">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="four columns">
+			<label for="outerWidthInput">Outer width:</label>
+			<input class="u-full-width" type="text" data-bind="format" data-bind-key="outer.width" value="<%= model.get('format') && model.get('format').outer ? model.get('format').outer.width : '' %>" id="outerWidthInput">
+		</div>
+		<div class="four columns">
+			<label for="outerHeightInput">Outer height:</label>
+			<input class="u-full-width" type="text" data-bind="format" data-bind-key="outer.height" value="<%= model.get('format') && model.get('format').outer ? model.get('format').outer.height : '' %>" id="outerHeightInput">
+		</div>
+		<div class="four columns">
+			<label for="outerUnitInput">Outer dimensions unit:</label>
+			<input class="u-full-width" type="text" data-bind="format" data-bind-key="outer.unit" value="<%= model.get('format') && model.get('format').outer ? model.get('format').outer.unit : '' %>" id="outerUnitInput">
+		</div>
+	</div>
+
+	<hr/>
+
+	<h5>Letter metadata</h5>
+
+	<div class="row">
+		<div class="three columns">
+			<label for="senderFirstNameInput">Sender first name:</label>
+			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="firstname" value="<%= model.get('sender') ? model.get('sender').firstname : '' %>" id="senderFirstNameInput">
+		</div>
+		<div class="three columns">
+			<label for="senderSurnameInput">Sender surname:</label>
+			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="surname" value="<%= model.get('sender') ? model.get('sender').surname : '' %>" id="senderSurnameInput">
+		</div>
+		<div class="three columns">
+			<label for="senderBirthYearInput">Sender birth year:</label>
+			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="birth_year" value="<%= model.get('sender') ? model.get('sender').birth_year : '' %>" id="senderBirthYearInput">
+		</div>
+		<div class="three columns">
+			<label for="senderDeathYearInput">Sender death year:</label>
+			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="death_year" value="<%= model.get('sender') ? model.get('sender').death_year : '' %>" id="senderDeathYearInput">
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="three columns">
+			<label for="recipientFirstNameInput">Recipient first name:</label>
+			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="firstname" value="<%= model.get('recipient') ? model.get('recipient').firstname : '' %>" id="recipientFirstNameInput">
+		</div>
+		<div class="three columns">
+			<label for="recipientSurnameInput">Recipient surname:</label>
+			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="surname" value="<%= model.get('recipient') ? model.get('recipient').surname : '' %>" id="recipientSurnameInput">
+		</div>
+		<div class="three columns">
+			<label for="recipientBirthYearInput">Recipient birth year:</label>
+			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="birth_year" value="<%= model.get('recipient') ? model.get('recipient').birth_year : '' %>" id="recipientBirthYearInput">
+		</div>
+		<div class="three columns">
+			<label for="recipientDeathYearInput">Recipient death year:</label>
+			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="death_year" value="<%= model.get('recipient') ? model.get('recipient').death_year : '' %>" id="recipientDeathYearInput">
+		</div>
+
+	</div>
+
+	<hr/>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a class="button" onclick="javascript:history.go(-1)">Go back</a>
+					<a class="button button-primary u-pull-right save-button">Save</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</script>
+
+<script type="text/template" id="bundleViewTemplate">
+
+	<div class="row">
+		<div class="twelve columns">
+			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>		</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="six columns">
+			<label for="titleInput">Title:</label>
+			<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput">
+		</div>
+		<div class="six columns">
+			<label for="descriptionInput">Description:</label>
+			<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
+		</div>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a class="button" onclick="javascript:history.go(-1)">Go back</a>
+					<a class="button button-primary u-pull-right save-button">Save</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+
+	<div class="image-list-container">
+		<div class="list-container grid-container"></div>
+	</div>
+
+</script>
+
+<script src="js/lib/require.js" data-main="js/init.js?4"></script>
+</body>
+</html>
