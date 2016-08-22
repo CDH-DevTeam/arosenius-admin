@@ -15,7 +15,7 @@ define(function(require){
 
 			this.model = new DataModel();
 			this.model.once('change', this.render, this);
-			this.model.url = 'http://cdh-vir-1.it.gu.se:8004/bundle/'+this.options.bundleId;
+			this.model.url = 'http://127.0.0.1:3000/bundle/'+this.options.bundleId;
 			this.model.fetch();
 		},
 
@@ -24,7 +24,7 @@ define(function(require){
 		},
 
 		saveButtonClick: function() {
-			this.model.url = 'http://cdh-vir-1.it.gu.se:8004/document/'+this.options.placeId;
+			this.model.url = 'http://127.0.0.1:3000/document/'+this.options.placeId;
 			this.model.save(null, {
 				success: _.bind(function() {
 					this.render();

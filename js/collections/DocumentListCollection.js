@@ -5,7 +5,7 @@ define(function(require){
 	var $ = require('jquery');
 
 	return Backbone.Collection.extend({
-		url: 'http://cdh-vir-1.it.gu.se:8004/documents',
+		url: 'http://localhost:3000/documents',
 
 		initialize: function() {
 			this.metadata = new Backbone.Model();

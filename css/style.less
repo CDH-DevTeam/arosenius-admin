@@ -3,9 +3,16 @@
 @import "tabs.css";
 @import "leaflet.css";
 @import "MarkerCluster.Default.css";
+@import "mixins.less";
 
 html {
 	background-color: #fbfbfb;
+}
+
+body {
+	&.has-overlay {
+		overflow-y: hidden;
+	}
 }
 
 .table-marker {
@@ -175,7 +182,32 @@ html {
 
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
 
-		transform: translate(-50%, -50%);
+		.transform(translate(-50%, -50%));
+	}
+
+	.image-overlay {
+		position: fixed;
+	
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	
+		background: rgba(0, 0, 0, 0.84);
+	
+		overflow-y: auto;
+
+		z-index: 3000;
+
+		img {
+			position: absolute;
+
+			left: 50%;
+
+			margin: 20px 0;
+
+			.transform(translate(-50%));
+		}
 	}
 }
 

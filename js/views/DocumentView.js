@@ -14,12 +14,13 @@ define(function(require){
 
 			this.model = new DataModel();
 			this.model.once('change', this.render, this);
-			this.model.url = 'http://cdh-vir-1.it.gu.se:8004/document/'+this.options.documentId;
+			this.model.url = 'http://localhost:3000/document/'+this.options.documentId;
 			this.model.fetch();
 		},
 
 		events: {
-			'click .save-button': 'saveButtonClick'
+			'click .save-button': 'saveButtonClick',
+			'click .image-link': 'imageLinkClick'
 		},
 
 		saveButtonClick: function() {
@@ -31,6 +32,21 @@ define(function(require){
 				}, this),
 				type: 'POST'
 			});
+		},
+
+		imageLinkClick: function(event) {
+			event.preventDefault();
+
+			var imageUrl = $(event.currentTarget).attr('href');
+
+			this.options.app.$el.find('.overlay-container').html('<div class="image-overlay"><img src="'+imageUrl+'"/></div>');
+
+			$(document.body).addClass('has-overlay');
+
+			this.options.app.$el.find('.overlay-container').click(_.bind(function() {
+				this.options.app.$el.find('.overlay-container').html('');
+				$(document.body).removeClass('has-overlay');
+			}, this));
 		},
 
 		render: function() {

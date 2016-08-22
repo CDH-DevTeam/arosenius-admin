@@ -174,7 +174,7 @@
 <script type="text/template" id="documentGridTemplate">
 
 	<% _.each(models, function(model) { %>
-		<a class="grid-item" href="#document/<%= model.get('id') %>" data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('image')+'.jpg' %>')">
+		<a class="grid-item" href="#document/<%= model.get('id') %>" data-id="<%= model.get('id') %>" style="background-image: url('http://127.0.0.1:3000/images/255x/<%= model.get('image')+'.jpg' %>')">
 			<div class="item-title"><%= model.get('title') %></div>
 		</a>
 	<% }); %>
@@ -284,7 +284,7 @@
 			<div class="row">
 				<div class="twelve columns">
 					<label>Museum internal id:</label>
-					<p><%= model.get('museum_int_id').join(', ') %></p>
+					<p><%= model.get('museum_int_id').constructor === Array ? model.get('museum_int_id').join(', ') : model.get('museum_int_id') %></p>
 				</div>
 			</div>
 
@@ -293,7 +293,7 @@
 
 		<div class="four columns">
 			<label>Image:</label>
-			<img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/>
+			<a class="image-link" href="http://127.0.0.1:3000/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://127.0.0.1:3000/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a>
 
 			<% if (model.get('color')) { %>
 				<div class="row">
