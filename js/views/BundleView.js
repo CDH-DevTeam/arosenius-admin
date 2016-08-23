@@ -9,13 +9,15 @@ define(function(require){
 	var DataModel = require('models/DataModel');
 	var DocumentsListView = require('views/DocumentsListView');
 
+	var config = require('config');
+
 	return DataView.extend({
 		initialize: function(options) {
 			this.options = options;
 
 			this.model = new DataModel();
 			this.model.once('change', this.render, this);
-			this.model.url = 'http://cdh-vir-1.it.gu.se:8004/bundle/'+this.options.bundleId;
+			this.model.url = config.apiUrl+'/bundle/'+this.options.bundleId;
 			this.model.fetch();
 		},
 
@@ -24,7 +26,7 @@ define(function(require){
 		},
 
 		saveButtonClick: function() {
-			this.model.url = 'http://cdh-vir-1.it.gu.se:8004/document/'+this.options.placeId;
+			this.model.url = config.apiUrl+'/document/'+this.options.placeId;
 			this.model.save(null, {
 				success: _.bind(function() {
 					this.render();

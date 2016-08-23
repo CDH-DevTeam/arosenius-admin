@@ -4,8 +4,10 @@ define(function(require){
 	var _ = require('underscore');
 	var $ = require('jquery');
 
+	var config = require('config');
+
 	return Backbone.Collection.extend({
-		url: 'http://cdh-vir-1.it.gu.se:8004/documents',
+		url: config.apiUrl+'/documents',
 
 		initialize: function() {
 			this.metadata = new Backbone.Model();
