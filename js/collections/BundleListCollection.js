@@ -6,6 +6,8 @@ define(function(require){
 
 	var config = require('config');
 
+	var authHelper = require('lib/auth.helper');
+
 	return Backbone.Collection.extend({
 		url: config.apiUrl+'/bundles',
 
@@ -27,6 +29,7 @@ define(function(require){
 			this.searchQuery = query;
 			this.url = this.urlBase+'/search/'+query;
 			this.fetch({
+				beforeSend: authHelper.sendAuthentication,
 				reset: true
 			});
 		},
@@ -39,6 +42,7 @@ define(function(require){
 
 			this.fetch({
 				reset: true,
+				beforeSend: authHelper.sendAuthentication,
 				data: {
 					page: this.currentPage
 				}

@@ -10,6 +10,8 @@ define(function(require){
 
 	var config = require('config');
 
+	var authHelper = require('lib/auth.helper');
+
 	return DataView.extend({
 		initialize: function(options) {
 			this.options = options;
@@ -17,7 +19,9 @@ define(function(require){
 			this.model = new DataModel();
 			this.model.once('change', this.render, this);
 			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
-			this.model.fetch();
+			this.model.fetch({
+				beforeSend: authHelper.sendAuthentication
+			});
 		},
 
 		events: {
@@ -28,6 +32,7 @@ define(function(require){
 		saveButtonClick: function() {
 			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
 			this.model.save(null, {
+				beforeSend: authHelper.sendAuthentication,
 				success: _.bind(function() {
 					this.render();
 					this.options.app.showMessage('Document entry saved.')

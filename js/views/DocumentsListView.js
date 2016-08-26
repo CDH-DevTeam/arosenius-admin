@@ -7,6 +7,10 @@ define(function(require){
 	var DocumentListCollection = require('collections/DocumentListCollection');
 	var DataListView = require('views/DataListView');
 
+	var config = require('config');
+
+	var authHelper = require('lib/auth.helper');
+
 	return DataListView.extend({
 		uiTemplateName: 'documentListViewTemplate',
 
@@ -112,6 +116,31 @@ define(function(require){
 
 		afterRenderUI: function() {
 			this.$el.find('.floating-toolbar .viewmode-button').click(_.bind(this.viewModeClick, this));
+
+			this.$el.find('.footer-toolbar .search-input').keydown(_.bind(function(event) {
+				if (event.keyCode == 13 && $(event.currentTarget).val().length > 3) {
+					var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+					this.collection.search($(event.currentTarget).val(), selectedMuseum == 'all' ? null : selectedMuseum);
+				}
+			}, this));
+
+			this.$el.find('.footer-toolbar .search-museum-select').change(_.bind(function(event) {
+				var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+				this.collection.search(this.$el.find('.search-input').val(), selectedMuseum == 'all' ? null : selectedMuseum);
+			}, this));
+
+			this.museumsCollection = new Backbone.Collection();
+			this.museumsCollection.url = config.apiUrl+'/museums';
+			this.museumsCollection.on('reset', _.bind(function() {
+				_.each(this.museumsCollection.models, _.bind(function(model) {
+					console.log(this.$el.find('.footer-toolbar .search-museum-select'));
+					this.$el.find('.footer-toolbar .search-museum-select').append('<option>'+model.get('museum')+'</option>');
+				}, this));
+			}, this));
+			this.museumsCollection.fetch({
+				reset: true,
+				beforeSend: authHelper.sendAuthentication
+			});
 		},
 
 		render: function() {

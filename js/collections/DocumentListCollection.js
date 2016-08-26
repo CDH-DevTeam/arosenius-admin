@@ -6,6 +6,8 @@ define(function(require){
 
 	var config = require('config');
 
+	var authHelper = require('lib/auth.helper');
+
 	return Backbone.Collection.extend({
 		url: config.apiUrl+'/documents',
 
@@ -23,11 +25,21 @@ define(function(require){
 			return data.documents;
 		},
 
-		search: function(query) {
+		search: function(query, museum) {
 			this.searchQuery = query;
-			this.url = this.urlBase+'/search/'+query;
+
+			var queryData = {};
+			if (query && query != '') {
+				queryData['search'] = query;
+			}
+			if (museum && museum != '') {
+				queryData['museum'] = museum;
+			}
+
 			this.fetch({
-				reset: true
+				reset: true,
+				beforeSend: authHelper.sendAuthentication,
+				data: queryData
 			});
 		},
 
@@ -37,6 +49,7 @@ define(function(require){
 
 			this.fetch({
 				reset: true,
+				beforeSend: authHelper.sendAuthentication,
 				data: {
 					page: this.currentPage,
 					bundle: bundle,
@@ -53,6 +66,7 @@ define(function(require){
 
 			this.fetch({
 				reset: true,
+				beforeSend: authHelper.sendAuthentication,
 				data: {
 					page: this.currentPage,
 					showAll: showAll ? true : false

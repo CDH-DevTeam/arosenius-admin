@@ -164,7 +164,10 @@
 						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
 						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
 					</div>
-					<input type="text" class="search-input u-pull-right" placeholder="Search">
+					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
+					<select type="text" class="search-museum-select u-pull-right toolbar-control">
+						<option value="all">All museums</option>
+					</select>
 				</div>
 			</div>
 		</div>
@@ -238,13 +241,16 @@
 					<label for="titleInput">Title:</label>
 					<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput">
 
-					<label for="subtitleInput">Subtitle:</label>
-					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= model.get('subtitle') %>" id="subtitleInput">
+					<label for="descriptionInput">Tags:</label>
+					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="tags" data-formatter="nl-array"><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
 				</div>
 
 				<div class="six columns">
-					<label for="descriptionInput">Tags:</label>
-					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="tags" data-formatter="nl-array"><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
+					<label for="subtitleInput">Subtitle:</label>
+					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= model.get('subtitle') %>" id="subtitleInput">
+
+					<label for="descriptionInput">Persons:</label>
+					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="persons" data-formatter="nl-array"><%= model.get('persons')? model.get('persons').join('\n') : '' %></textarea>
 				</div>
 			</div>
 
@@ -462,7 +468,8 @@
 
 	<div class="row">
 		<div class="twelve columns">
-			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>		</div>
+			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
+		</div>
 	</div>
 
 	<hr/>
@@ -497,6 +504,22 @@
 
 </script>
 
-<script src="js/lib/require.js" data-main="js/init.js?4"></script>
+
+<script type="text/template" id="loginTemplate">
+
+	<div class="row">
+		<div class="twelve columns">
+			<h2 style="margin-bottom: 10px">Login</h2>
+			<label>Username</label>
+			<input type="text" id="loginUserInput"/>
+			<label>Password</label>
+			<input type="password" id="loginPasswordInput"/><br/><br/>
+			<button id="loginButton" class="button button-primary">Login</button>
+		</div>
+	</div>
+
+</script>
+
+<script src="js/lib/require.js" data-main="js/init.js?8"></script>
 </body>
 </html>

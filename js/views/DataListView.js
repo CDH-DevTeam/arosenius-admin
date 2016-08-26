@@ -13,16 +13,7 @@ define(function(require){
 			},
 			'click .footer-toolbar .next': function() {
 				this.collection.getPage(Number(this.collection.currentPage)+1, this.collection.order, this.collection.orderDir);
-			},
-			'keydown .footer-toolbar .search-input': function(event) {
-				if (event.keyCode == 13 && $(event.currentTarget).val().length > 3) {
-					this.collection.search($(event.currentTarget).val());
-					this.trigger('search', {
-						query: $(event.currentTarget).val()
-					});
-				}
-			},
-			'click .check-all': 'checkAllClick'
+			}
 		},
 
 		checkAllClick: function(event) {

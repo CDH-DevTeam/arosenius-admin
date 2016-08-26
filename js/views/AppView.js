@@ -6,9 +6,21 @@ define(function(require){
 
 	var AppRouter = require('router/AppRouter');
 
+	var authHelper = require('lib/auth.helper');
+
 	return Backbone.View.extend({
 		initialize: function() {
 			this.render();
+
+			if (!authHelper.authenticated()) {
+				authHelper.login(this, _.bind(this.initializeReady, this));
+			}
+			else {
+				this.initializeReady();
+			}
+		},
+
+		initializeReady: function() {
 
 			this.router = new AppRouter();
 			this.router.on('route:default', _.bind(function() {
