@@ -11,6 +11,8 @@ define(function(require){
 
 	var config = require('config');
 
+	var authHelper = require('lib/auth.helper');
+
 	return DataView.extend({
 		initialize: function(options) {
 			this.options = options;
@@ -18,7 +20,9 @@ define(function(require){
 			this.model = new DataModel();
 			this.model.once('change', this.render, this);
 			this.model.url = config.apiUrl+'/bundle/'+this.options.bundleId;
-			this.model.fetch();
+			this.model.fetch({
+				beforeSend: authHelper.sendAuthentication
+			});
 		},
 
 		events: {
