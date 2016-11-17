@@ -244,8 +244,16 @@
 					<label for="titleInput">Title:</label>
 					<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput">
 
-					<label for="typeInput">Type:</label>
-					<input class="u-full-width" type="text" data-bind="type" value="<%= model.get('type') %>" id="typeInput">
+					<label for="typeInput">Document Type:</label>
+					<select class="u-full-width" data-bind="type" data-bind="type" value="<%= model.get('type') %>" id="typeInput">
+						<option value="">...</option>
+						<option value="manuskript" <%= model.get('type') == 'manuskript' ? 'selected' : '' %>>manuskript</option>
+						<option value="brev" <%= model.get('type') == 'brev' ? 'selected' : '' %>>brev</option>
+						<option value="konstverk" <%= model.get('type') == 'konstverk' ? 'selected' : '' %>>konstverk</option>
+						<option value="trycksak" <%= model.get('type') == 'trycksak' ? 'selected' : '' %>>trycksak</option>
+						<option value="fotografi" <%= model.get('type') == 'fotografi' ? 'selected' : '' %>>fotografi</option>
+					</select>
+<!--					<input class="u-full-width" type="text" data-bind="type" value="<%= model.get('type') %>" id="typeInput">-->
 
 				</div>
 

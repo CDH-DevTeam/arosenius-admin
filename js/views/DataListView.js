@@ -5,17 +5,6 @@ define(function(require){
 	var $ = require('jquery');
 
 	return Backbone.View.extend({
-		events: {
-			'click .footer-toolbar .prev': function() {
-				if (this.collection.currentPage > 1) {
-					this.collection.getPage(Number(this.collection.currentPage)-1, this.collection.order, this.collection.orderDir);
-				}
-			},
-			'click .footer-toolbar .next': function() {
-				this.collection.getPage(Number(this.collection.currentPage)+1, this.collection.order, this.collection.orderDir);
-			}
-		},
-
 		checkAllClick: function(event) {
 			if (!this.disableCheckBoxes) {
 				console.log($(event.currentTarget).closest('table').find('.item-check').length)

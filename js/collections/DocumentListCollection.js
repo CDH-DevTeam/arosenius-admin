@@ -25,24 +25,6 @@ define(function(require){
 			return data.documents;
 		},
 
-		search: function(query, museum) {
-			this.searchQuery = query;
-
-			var queryData = {};
-			if (query && query != '') {
-				queryData['search'] = query;
-			}
-			if (museum && museum != '') {
-				queryData['museum'] = museum;
-			}
-
-			this.fetch({
-				reset: true,
-				beforeSend: authHelper.sendAuthentication,
-				data: queryData
-			});
-		},
-
 		byBundle: function(bundle, page, showAll) {
 			this.searchQuery = '';
 			this.currentPage = page;
@@ -58,19 +40,24 @@ define(function(require){
 			});
 		},
 
-		getPage: function(page, order, orderDir, showAll) {
-			this.searchQuery = '';
-			this.order = order == undefined ? '' : order;
-			this.orderDir = orderDir == undefined ? '' : orderDir;
+		getPage: function(page, museum, searchQuery) {
 			this.currentPage = page;
+
+			var searchParams = {
+				page: this.currentPage
+			};
+
+			if (museum) {
+				searchParams['museum'] = museum;
+			}
+			if (searchQuery) {
+				searchParams['search'] = searchQuery;
+			}
 
 			this.fetch({
 				reset: true,
 				beforeSend: authHelper.sendAuthentication,
-				data: {
-					page: this.currentPage,
-					showAll: showAll ? true : false
-				}
+				data: searchParams
 			});
 		}
 	});
