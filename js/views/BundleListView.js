@@ -35,6 +35,26 @@ define(function(require){
 			}, this));
 		},
 
+		events: {
+			'click .footer-toolbar .prev': function() {
+				if (this.collection.currentPage > 1) {
+					this.options.app.router.navigate('bundles/'+(Number(this.collection.currentPage)-1),
+					{
+						trigger: true
+					});
+				}
+			},
+			'click .footer-toolbar .next': function() {
+				var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+				var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
+
+				this.options.app.router.navigate('bundles/'+(Number(this.collection.currentPage)+1),
+				{
+					trigger: true
+				});
+			}
+		},
+
 		updateMetadata: function() {
 			if (this.collection.metadata.get('page') != undefined) {
 				this.$el.find('.page-info').html((Number(this.collection.metadata.get('page'))+200)+' / '+this.collection.metadata.get('total'));

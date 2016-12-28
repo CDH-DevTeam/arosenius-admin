@@ -290,7 +290,7 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="dateInput">Date:</label>
-					<input class="u-full-width" type="text" data-bind="date" data-bind-key="date" value="<%= model.get('date').date %>" id="dateInput">
+					<input class="u-full-width" type="text" data-bind="item_date" value="<%= model.get('item_date') %>" id="dateInput">
 				</div>
 
 				<div class="six columns">
@@ -379,7 +379,7 @@
 		
 		<div class="six columns">
 			<label for="technicMaterialInput">Material:</label>
-			<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="material" data-formatter="nl-array"><%= model.get('material')? model.get('material').join('\n') : '' %></textarea>
+			<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="material" data-formatter="nl-array"><%= model.get('material') && model.get('material').join ? model.get('material').join('\n') : '' %></textarea>
 		</div>
 
 		<div class="six columns">
@@ -390,33 +390,37 @@
 	</div>
 
 	<div class="row">
-		<div class="four columns">
+		<div class="six columns">
 			<label for="innerWidthInput">Inner width:</label>
-			<input class="u-full-width" type="text" data-bind="format" data-bind-key="inner.width" value="<%= model.get('format') && model.get('format').inner ? model.get('format').inner.width : '' %>" id="innerWidthInput">
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput">
 		</div>
-		<div class="four columns">
+		<div class="six columns">
 			<label for="innerHeightInput">Inner height:</label>
-			<input class="u-full-width" type="text" data-bind="format" data-bind-key="inner.height" value="<%= model.get('format') && model.get('format').inner ? model.get('format').inner.height : '' %>" id="innerHeightInput">
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.height" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.height : '' %>" id="innerHeightInput">
 		</div>
+<!--
 		<div class="four columns">
 			<label for="innerUnitInput">Inner dimensions unit:</label>
-			<input class="u-full-width" type="text" data-bind="format" data-bind-key="inner.unit" value="<%= model.get('format') && model.get('format').inner ? model.get('format').inner.unit : '' %>" id="innerUnitInput">
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.unit" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.unit : '' %>" id="innerUnitInput">
 		</div>
+-->
 	</div>
 
 	<div class="row">
-		<div class="four columns">
+		<div class="six columns">
 			<label for="outerWidthInput">Outer width:</label>
-			<input class="u-full-width" type="text" data-bind="format" data-bind-key="outer.width" value="<%= model.get('format') && model.get('format').outer ? model.get('format').outer.width : '' %>" id="outerWidthInput">
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput">
 		</div>
-		<div class="four columns">
+		<div class="six columns">
 			<label for="outerHeightInput">Outer height:</label>
-			<input class="u-full-width" type="text" data-bind="format" data-bind-key="outer.height" value="<%= model.get('format') && model.get('format').outer ? model.get('format').outer.height : '' %>" id="outerHeightInput">
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.height" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.height : '' %>" id="outerHeightInput">
 		</div>
+<!--
 		<div class="four columns">
 			<label for="outerUnitInput">Outer dimensions unit:</label>
-			<input class="u-full-width" type="text" data-bind="format" data-bind-key="outer.unit" value="<%= model.get('format') && model.get('format').outer ? model.get('format').outer.unit : '' %>" id="outerUnitInput">
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.unit" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.unit : '' %>" id="outerUnitInput">
 		</div>
+-->
 	</div>
 
 	<div class="row">
