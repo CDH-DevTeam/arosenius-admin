@@ -369,24 +369,17 @@
 			<label for="technicInput">Technique:</label>
 			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="value" value="<%= model.get('technic') ? model.get('technic').value : '' %>" id="technicInput">
 		</div>
-		<div class="six columns">
-			<label for="technicCommentInput">Technic comment:</label>
-			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="comment" value="<%= model.get('technic') ? model.get('technic').comment : '' %>" id="technicCommentInput">
-		</div>
-	</div>
 
-	<div class="row">
-		
 		<div class="six columns">
 			<label for="technicMaterialInput">Material:</label>
 			<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="material" data-formatter="nl-array"><%= model.get('material') && model.get('material').join ? model.get('material').join('\n') : '' %></textarea>
 		</div>
-
+<!--
 		<div class="six columns">
-			<label for="acquisitionInput">Acquisition:</label>
-			<input class="u-full-width" type="text" data-bind="acquisition" value="<%= model.get('acquisition') ? model.get('acquisition') : '' %>" id="acquisitionInput">
+			<label for="technicCommentInput">Technic comment:</label>
+			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="comment" value="<%= model.get('technic') ? model.get('technic').comment : '' %>" id="technicCommentInput">
 		</div>
-
+-->
 	</div>
 
 	<div class="row">
@@ -425,17 +418,22 @@
 
 	<div class="row">
 		<div class="six columns">
-			<label for="reproductionsInput">Reproductions:</label>
-			<textarea id="reproductionsInput" rows="10" class="u-full-width" type="text" data-bind="reproductions"><%= model.get('reproductions') %></textarea>
+			<label for="acquisitionInput">Acquisition:</label>
+			<input class="u-full-width" type="text" data-bind="acquisition" value="<%= model.get('acquisition') ? model.get('acquisition') : '' %>" id="acquisitionInput">
 		</div>
 
 		<div class="six columns">
-			<label for="literatureInput">Literature:</label>
-			<textarea id="literatureInput" rows="10" class="u-full-width" type="text" data-bind="literature"><%= model.get('literature') %></textarea>
+			<label for="reproductionsInput">Reproductions:</label>
+			<textarea id="reproductionsInput" rows="10" class="u-full-width" type="text" data-bind="reproductions"><%= model.get('reproductions') %></textarea>
 		</div>
 	</div>
 
 	<div class="row">
+		<div class="six columns">
+			<label for="literatureInput">Literature:</label>
+			<textarea id="literatureInput" rows="10" class="u-full-width" type="text" data-bind="literature"><%= model.get('literature') %></textarea>
+		</div>
+
 		<div class="six columns">
 			<label for="exhibitionsInput">Exhibitions:</label>
 			<textarea id="exhibitionsInput" rows="10" class="u-full-width" type="text" data-bind="exhibitions"><%= model.get('exhibitions') %></textarea>
