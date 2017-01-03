@@ -169,7 +169,7 @@ define(function(require){
 			this.museumsCollection.url = config.apiUrl+'/museums';
 			this.museumsCollection.on('reset', _.bind(function() {
 				_.each(this.museumsCollection.models, _.bind(function(model) {
-					this.$el.find('.footer-toolbar .search-museum-select').append('<option>'+model.get('museum')+'</option>');
+					this.$el.find('.footer-toolbar .search-museum-select').append('<option>'+model.get('value')+'</option>');
 				}, this));
 			}, this));
 			this.museumsCollection.fetch({
