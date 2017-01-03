@@ -3,6 +3,8 @@ define(function(require){
 	var _ = require('underscore');
 	var $ = require('jquery');
 
+	var config = require('config');
+
 	return Backbone.View.extend({
 		objReference: function(obj, ref, value) {
 			if (typeof obj == 'undefined') {
@@ -25,6 +27,38 @@ define(function(require){
 
 				return this.objReference(obj[ref[0]], ref.slice(1), value);
 			}
+		},
+
+		initDataSelects: function() {
+			_.each(this.$el.find('.data-select-wrapper'), _.bind(function(el) {
+				var optionsCollection = new Backbone.Collection();
+				optionsCollection.url = config.publicApiUrl+$(el).data('endpoint');
+				optionsCollection.on('reset', function() {
+					var selectEl = $('<select class="data-select"><option>...</option>'+_.map(
+						_.filter(optionsCollection.models, function(model) {
+							return model.get('value') != '';
+						}), function(model) {
+						return '<option>'+model.get('value')+'</option>';
+					}).join('')+'</select>');
+
+					$(el).append(selectEl);
+	
+					selectEl.on('change', function(event) {
+						var selectedValue = selectEl.find(":selected").text();
+
+						if (selectedValue != '...') {
+							$(el).find('textarea').val(selectedValue+'\n'+$(el).find('textarea').val());
+							setTimeout(function() {
+								$(el).find('textarea').change();
+							}, 100);
+							selectEl.val('...');
+						}
+					});
+				});
+				optionsCollection.fetch({
+					reset: true
+				});
+			}, this));
 		},
 
 		initBindings: function() {
@@ -53,11 +87,11 @@ define(function(require){
 				var bindFormatter = $(el).data('formatter');
 
 				if ($(el).is('input') || $(el).is('textarea')) {
-					$(el).focusout(_.bind(function() {
+					$(el).change(_.bind(function() {
 						var value = $(el).val();
 						if (bindFormatter) {
 							if (bindFormatter == 'nl-array') {
-								value = value.split("\n");
+								value = _.uniq(value.split("\n"));
 								if (value.length && value[0] == '') {
 									value = [];
 								}

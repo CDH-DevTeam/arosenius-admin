@@ -64,6 +64,9 @@ define(function(require){
 			}));
 
 			this.initBindings();
+
+			this.initDataSelects();
+
 			return this;
 		},
 
