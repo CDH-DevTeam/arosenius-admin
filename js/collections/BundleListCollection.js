@@ -34,18 +34,24 @@ define(function(require){
 			});
 		},
 
-		getPage: function(page, order, orderDir) {
-			this.searchQuery = '';
-			this.order = order == undefined ? '' : order;
-			this.orderDir = orderDir == undefined ? '' : orderDir;
+		getPage: function(page, museum, searchQuery) {
 			this.currentPage = page;
+
+			var searchParams = {
+				page: this.currentPage
+			};
+
+			if (museum) {
+				searchParams['museum'] = museum;
+			}
+			if (searchQuery) {
+				searchParams['search'] = searchQuery;
+			}
 
 			this.fetch({
 				reset: true,
 				beforeSend: authHelper.sendAuthentication,
-				data: {
-					page: this.currentPage
-				}
+				data: searchParams
 			});
 		}
 	});

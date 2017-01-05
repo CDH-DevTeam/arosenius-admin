@@ -113,6 +113,8 @@ define(function(require){
 		},
 
 		setViewMode: function(viewMode) {
+			console.log('- setViewMode -');
+			console.log(this.options);
 			this.viewMode = viewMode;
 			localStorage.viewMode = this.viewMode;
 
@@ -125,6 +127,8 @@ define(function(require){
 
 			this.renderUI();
 			this.render();
+			console.log(this.options);
+			console.log('-');
 		},
 
 		uiSearch: function() {
@@ -154,27 +158,27 @@ define(function(require){
 			this.$el.find('.footer-toolbar .search-input').keydown(_.bind(function(event) {
 				if (event.keyCode == 13) {
 					this.uiSearch();
-//					var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
-//					this.collection.search($(event.currentTarget).val(), selectedMuseum == 'all' ? null : selectedMuseum);
 				}
 			}, this));
 
 			this.$el.find('.footer-toolbar .search-museum-select').change(_.bind(function(event) {
 				this.uiSearch();
-//				var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
-//				this.collection.search(this.$el.find('.search-input').val(), selectedMuseum == 'all' ? null : selectedMuseum);
 			}, this));
 
 			this.museumsCollection = new Backbone.Collection();
-			this.museumsCollection.url = config.apiUrl+'/museums';
+			this.museumsCollection.url = config.publicApiUrl+'/museums';
 			this.museumsCollection.on('reset', _.bind(function() {
+				console.log('museumsCollection.reset');
+				console.log(this.options);
 				_.each(this.museumsCollection.models, _.bind(function(model) {
 					this.$el.find('.footer-toolbar .search-museum-select').append('<option>'+model.get('value')+'</option>');
 				}, this));
+				if (this.options.museum && this.options.museum != '') {
+					this.$el.find('.footer-toolbar .search-museum-select').val(this.options.museum);
+				}
 			}, this));
 			this.museumsCollection.fetch({
-				reset: true,
-				beforeSend: authHelper.sendAuthentication
+				reset: true
 			});
 		},
 
@@ -191,7 +195,7 @@ define(function(require){
 				models: this.collection.models
 			}));
 			this.$el.find('.item-check').click(_.bind(this.placeCheckClick, this));
-			this.placeCheckClick();			
+			this.placeCheckClick();
 		}
 	});
 });

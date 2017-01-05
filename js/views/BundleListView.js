@@ -7,6 +7,8 @@ define(function(require){
 	var BundleListCollection = require('collections/BundleListCollection');
 	var DataListView = require('views/DataListView');
 
+	var config = require('config');
+
 	return DataListView.extend({
 		uiTemplateName: 'bundleListViewTemplate',
 		viewMode: 'grid',
@@ -20,12 +22,7 @@ define(function(require){
 			this.collection.on('reset', this.render, this);
 			this.collection.metadata.on('change', this.updateMetadata, this);
 
-			if (this.options.searchQuery != '') {
-				this.collection.search(this.options.searchQuery);
-			}
-			else {
-				this.collection.getPage(this.options.page, this.options.order, this.options.orderDir);
-			}
+			this.collection.getPage(this.options.page, this.options.museum, this.options.searchQuery);
 
 			this.renderUI();
 
@@ -38,7 +35,12 @@ define(function(require){
 		events: {
 			'click .footer-toolbar .prev': function() {
 				if (this.collection.currentPage > 1) {
-					this.options.app.router.navigate('bundles/'+(Number(this.collection.currentPage)-1),
+					var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+					var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
+
+					this.options.app.router.navigate('bundles/page/'+(Number(this.collection.currentPage)-1)+
+						(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
+						(searchQuery != '' ? '/search/'+searchQuery : ''),
 					{
 						trigger: true
 					});
@@ -48,7 +50,9 @@ define(function(require){
 				var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
 				var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
 
-				this.options.app.router.navigate('bundles/'+(Number(this.collection.currentPage)+1),
+				this.options.app.router.navigate('bundles/page/'+(Number(this.collection.currentPage)+1)+
+					(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
+					(searchQuery != '' ? '/search/'+searchQuery : ''),
 				{
 					trigger: true
 				});
@@ -83,19 +87,58 @@ define(function(require){
 		},
 
 		render: function() {
-			if (this.collection.searchQuery != '') {
-				this.options.router.navigate('/bundles/search/'+this.collection.searchQuery);
-			}
-			else {
-				this.options.router.navigate('/bundles/'+this.collection.currentPage+
-					(this.collection.order != '' ? '/'+this.collection.order : '')+
-					(this.collection.orderDir != '' ? '/'+this.collection.orderDir : '')
-				);
-			}
-
 			this.renderList();
 
 			return this;
+		},
+
+		uiSearch: function() {
+			var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+			var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
+			console.log(searchQuery);
+			if (selectedMuseum == 'all' && searchQuery == '') {
+				this.collection.getPage(1);
+
+				this.options.app.router.navigate('bundles/page/1', {
+					trigger: true
+				});
+			}
+			else {
+				this.options.app.router.navigate('bundles/page/1'+
+					(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
+					(searchQuery != '' ? '/search/'+searchQuery : ''),
+				{
+					trigger: true
+				});
+			}
+		},
+
+		afterRenderUI: function() {
+			this.$el.find('.footer-toolbar .search-input').keydown(_.bind(function(event) {
+				if (event.keyCode == 13) {
+					this.uiSearch();
+				}
+			}, this));
+
+			this.$el.find('.footer-toolbar .search-museum-select').change(_.bind(function(event) {
+				this.uiSearch();
+			}, this));
+
+			this.museumsCollection = new Backbone.Collection();
+			this.museumsCollection.url = config.publicApiUrl+'/museums';
+			this.museumsCollection.on('reset', _.bind(function() {
+				console.log('museumsCollection.reset');
+				console.log(this.options);
+				_.each(this.museumsCollection.models, _.bind(function(model) {
+					this.$el.find('.footer-toolbar .search-museum-select').append('<option>'+model.get('value')+'</option>');
+				}, this));
+				if (this.options.museum && this.options.museum != '') {
+					this.$el.find('.footer-toolbar .search-museum-select').val(this.options.museum);
+				}
+			}, this));
+			this.museumsCollection.fetch({
+				reset: true
+			});
 		},
 
 		renderList: function() {

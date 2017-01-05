@@ -10,7 +10,7 @@ define(function(require){
 			"places/search/:query": "placesearch",
 			"documents(/page/:page)(/museum/:museum)(/search/:search)": "documents",
 			"document/:id": "document",
-			"bundles(/:page)": "bundles",
+			"bundles(/page/:page)(/museum/:museum)(/search/:search)": "bundles",
 			"bundle/:bundle": "bundle",
 			"map": "map"
 		}

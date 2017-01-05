@@ -55,6 +55,7 @@
 			<td><input data-id="<%= model.get('bundle') %>" class="item-check" type="checkbox"/></td>
 			<td><a class="row-name" href="#bundle/<%= model.get('bundle') %>"><%= model.get('bundle') %></a></td>
 			<td><a class="row-name" href="#bundle/<%= model.get('bundle') %>"><%= model.get('title') %></a></td>
+			<td><a class="row-name" href="#bundle/<%= model.get('bundle') %>"><%= model.get('collection').museum %></a></td>
 		</tr>
 	<% }); %>
 
@@ -71,7 +72,8 @@
 					<tr>
 						<th width="5%"><div class="check-all"></div></th>
 						<th width="20%"><a class="column-sort" href="#" data-sort="name">Bundle</a></th>
-						<th width="75%"><a class="column-sort" href="#" data-sort="name">Title</a></th>
+						<th width="35%"><a class="column-sort" href="#" data-sort="name">Title</a></th>
+						<th width="40%"><a class="column-sort" href="#" data-sort="name">Museum</a></th>
 					</tr>
 				</thead>
 
@@ -98,7 +100,10 @@
 						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
 						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
 					</div>
-					<input type="text" class="search-input u-pull-right" placeholder="Search">
+					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
+					<select type="text" class="search-museum-select u-pull-right toolbar-control">
+						<option value="all">All museums</option>
+					</select>
 				</div>
 			</div>
 		</div>
