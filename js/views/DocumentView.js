@@ -16,11 +16,11 @@ define(function(require){
 		initialize: function(options) {
 			this.options = options;
 
-			this.model = new DataModel();
 			this.getDocument(this.options.documentId);
 		},
 
 		getDocument: function(documentId) {
+			this.model = new DataModel();
 			this.options.documentId = documentId;
 			this.model.once('change', this.render, this);
 			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
