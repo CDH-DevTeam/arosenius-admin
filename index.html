@@ -277,25 +277,35 @@
 			</div>
 
 			<div class="row">
-				<div class="six columns">
+				<div class="twelve columns">
 					<label for="descriptionInput">Description:</label>
 					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
+				</div>
+			</div>
 
+			<div class="row">
+				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/types">
 						<label for="typeInput">Document Type:</label>
 						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array"><%= model.get('type')? model.get('type').join('\n') : '' %></textarea>
 					</div>
+
+					<div class="data-select-wrapper" data-endpoint="/tags">
+						<label for="tagsInput">Tags:</label>
+						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array"><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
+					</div>
 				</div>
 
 				<div class="six columns">
-					<div class="data-select-wrapper" data-endpoint="/tags">
-						<label for="descriptionInput">Tags:</label>
-						<textarea id="descriptionInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array"><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
-					</div>
 
 					<div class="data-select-wrapper" data-endpoint="/persons">
-						<label for="descriptionInput">Persons:</label>
-						<textarea id="descriptionInput" class="u-full-width textarea-list" type="text" data-bind="persons" data-formatter="nl-array"><%= model.get('persons')? model.get('persons').join('\n') : '' %></textarea>
+						<label for="personsInput">Persons:</label>
+						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="persons" data-formatter="nl-array"><%= model.get('persons')? model.get('persons').join('\n') : '' %></textarea>
+					</div>
+
+					<div class="data-select-wrapper" data-endpoint="/places">
+						<label for="placesInput">Places:</label>
+						<textarea id="placesInput" class="u-full-width textarea-list" type="text" data-bind="places" data-formatter="nl-array"><%= model.get('places')? model.get('places').join('\n') : '' %></textarea>
 					</div>
 				</div>
 			</div>
