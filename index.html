@@ -333,7 +333,7 @@
 
 		<div class="four columns">
 			<label>Image:</label>
-			<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a>
+			<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a><br/><a href="http://cdh-vir-1.it.gu.se:8004/images/<%= model.get('image')+'.jpg' %>" target="_blank">View full size</a>
 
 			<% if (model.get('color')) { %>
 				<div class="row">
