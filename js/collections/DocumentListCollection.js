@@ -40,7 +40,7 @@ define(function(require){
 			});
 		},
 
-		getPage: function(page, museum, searchQuery) {
+		getPage: function(page, museum, type, searchQuery) {
 			this.currentPage = page;
 
 			var searchParams = {
@@ -49,6 +49,9 @@ define(function(require){
 
 			if (museum) {
 				searchParams['museum'] = museum;
+			}
+			if (type) {
+				searchParams['type'] = type;
 			}
 			if (searchQuery) {
 				searchParams['search'] = searchQuery;

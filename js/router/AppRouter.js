@@ -8,7 +8,7 @@ define(function(require){
 		routes: {
 			"": "default",
 			"places/search/:query": "placesearch",
-			"documents(/page/:page)(/museum/:museum)(/search/:search)": "documents",
+			"documents(/page/:page)(/museum/:museum)(/type/:type)(/search/:search)": "documents",
 			"document/:id": "document",
 			"bundles(/page/:page)(/museum/:museum)(/search/:search)": "bundles",
 			"bundle/:bundle": "bundle",

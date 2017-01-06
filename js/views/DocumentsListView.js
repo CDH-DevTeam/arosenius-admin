@@ -27,7 +27,7 @@ define(function(require){
 				this.collection.byBundle(this.options.bundle, 0, this.options.showAll);
 			}
 			else {
-				this.collection.getPage(this.options.page, this.options.museum, this.options.searchQuery);
+				this.collection.getPage(this.options.page, this.options.museum, this.options.type, this.options.searchQuery);
 			}
 
 			if (this.viewMode == 'grid') {
@@ -58,10 +58,12 @@ define(function(require){
 			'click .footer-toolbar .prev': function() {
 				if (this.collection.currentPage > 1) {
 					var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+					var selectedType = this.$el.find('.search-type-select').find(":selected").val();
 					var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
 
 					this.options.app.router.navigate('documents/page/'+(Number(this.collection.currentPage)-1)+
 						(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
+						(selectedType != 'all' ? '/type/'+selectedType : '')+
 						(searchQuery != '' ? '/search/'+searchQuery : ''),
 					{
 						trigger: true
@@ -70,10 +72,12 @@ define(function(require){
 			},
 			'click .footer-toolbar .next': function() {
 				var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+				var selectedType = this.$el.find('.search-type-select').find(":selected").val();
 				var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
 
 				this.options.app.router.navigate('documents/page/'+(Number(this.collection.currentPage)+1)+
 					(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
+					(selectedType != 'all' ? '/type/'+selectedType : '')+
 					(searchQuery != '' ? '/search/'+searchQuery : ''),
 				{
 					trigger: true
@@ -131,11 +135,17 @@ define(function(require){
 			console.log('-');
 		},
 
+		updateOptions: function() {
+			this.$el.find('.footer-toolbar .search-museum-select').val(this.options.museum ? this.options.museum : 'all');
+			this.$el.find('.footer-toolbar .search-type-select').val(this.options.type ? this.options.type : 'all');
+		},
+
 		uiSearch: function() {
 			var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
+			var selectedType = this.$el.find('.search-type-select').find(":selected").val();
 			var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
 
-			if (selectedMuseum == 'all' && searchQuery == '') {
+			if (selectedMuseum == 'all' && selectedType == 'all' && searchQuery == '') {
 				this.collection.getPage(1);
 
 				this.options.app.router.navigate('documents/page/1', {
@@ -145,6 +155,7 @@ define(function(require){
 			else {
 				this.options.app.router.navigate('documents/page/1'+
 					(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
+					(selectedType != 'all' ? '/type/'+selectedType : '')+
 					(searchQuery != '' ? '/search/'+searchQuery : ''),
 				{
 					trigger: true
@@ -161,15 +172,13 @@ define(function(require){
 				}
 			}, this));
 
-			this.$el.find('.footer-toolbar .search-museum-select').change(_.bind(function(event) {
+			this.$el.find('.footer-toolbar select').change(_.bind(function(event) {
 				this.uiSearch();
 			}, this));
 
 			this.museumsCollection = new Backbone.Collection();
 			this.museumsCollection.url = config.publicApiUrl+'/museums';
 			this.museumsCollection.on('reset', _.bind(function() {
-				console.log('museumsCollection.reset');
-				console.log(this.options);
 				_.each(this.museumsCollection.models, _.bind(function(model) {
 					this.$el.find('.footer-toolbar .search-museum-select').append('<option>'+model.get('value')+'</option>');
 				}, this));
@@ -178,6 +187,20 @@ define(function(require){
 				}
 			}, this));
 			this.museumsCollection.fetch({
+				reset: true
+			});
+
+			this.typeCollection = new Backbone.Collection();
+			this.typeCollection.url = config.publicApiUrl+'/types';
+			this.typeCollection.on('reset', _.bind(function() {
+				_.each(this.typeCollection.models, _.bind(function(model) {
+					this.$el.find('.footer-toolbar .search-type-select').append('<option>'+model.get('value')+'</option>');
+				}, this));
+				if (this.options.type && this.options.type != '') {
+					this.$el.find('.footer-toolbar .search-type-select').val(this.options.type);
+				}
+			}, this));
+			this.typeCollection.fetch({
 				reset: true
 			});
 		},

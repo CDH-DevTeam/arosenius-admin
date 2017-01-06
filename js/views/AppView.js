@@ -28,8 +28,8 @@ define(function(require){
 					trigger: true
 				});
 			}, this));
-			this.router.on('route:documents', _.bind(function(page, museum, searchQuery) {
-				this.showDocumentsListView(page, museum, searchQuery);
+			this.router.on('route:documents', _.bind(function(page, museum, type, searchQuery) {
+				this.showDocumentsListView(page, museum, type, searchQuery);
 			}, this));
 			this.router.on('route:document', _.bind(function(documentId) {
 				this.showDocumentView(documentId);
@@ -50,7 +50,7 @@ define(function(require){
 			}, this), 1500);
 		},
 
-		showDocumentsListView: function(page, museum, searchQuery) {
+		showDocumentsListView: function(page, museum, type, searchQuery) {
 			console.log('page :'+page);
 			if (this.currentView != 'DocumentsListView') {
 				this.currentView = 'DocumentsListView';
@@ -65,6 +65,7 @@ define(function(require){
 					router: this.router,
 					page: page == undefined ? 1 : page,
 					museum: museum == undefined ? '' : museum,
+					type: type == undefined ? '' : type,
 					searchQuery: searchQuery == undefined ? '' : searchQuery,
 					app: this
 				});
@@ -72,9 +73,11 @@ define(function(require){
 			else {
 				this.mainView.options.page = page;
 				this.mainView.options.museum = museum;
+				this.mainView.options.type = type;
 				this.mainView.options.searchQuery = searchQuery;
+				this.mainView.updateOptions();
 
-				this.mainView.collection.getPage(page == undefined ? 1 : page, museum, searchQuery);
+				this.mainView.collection.getPage(page == undefined ? 1 : page, museum, type, searchQuery);
 			}
 		},
 
@@ -100,6 +103,7 @@ define(function(require){
 				this.mainView.options.page = page;
 				this.mainView.options.museum = museum;
 				this.mainView.options.searchQuery = searchQuery;
+				this.mainView.updateOptions();
 
 				this.mainView.collection.getPage(page == undefined ? 1 : page, museum, searchQuery);
 			}
@@ -119,6 +123,9 @@ define(function(require){
 					router: this.router,
 					app: this
 				});
+			}
+			else {
+				this.mainView.getDocument(documentId);
 			}
 		},
 

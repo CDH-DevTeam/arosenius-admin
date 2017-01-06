@@ -92,6 +92,10 @@ define(function(require){
 			return this;
 		},
 
+		updateOptions: function() {
+			this.$el.find('.footer-toolbar .search-museum-select').val(this.options.museum ? this.options.museum : 'all');
+		},
+
 		uiSearch: function() {
 			var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
 			var searchQuery = this.$el.find('.footer-toolbar .search-input').val();

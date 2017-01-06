@@ -17,6 +17,11 @@ define(function(require){
 			this.options = options;
 
 			this.model = new DataModel();
+			this.getDocument(this.options.documentId);
+		},
+
+		getDocument: function(documentId) {
+			this.options.documentId = documentId;
 			this.model.once('change', this.render, this);
 			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
 			this.model.fetch({
@@ -56,6 +61,18 @@ define(function(require){
 			}, this));
 		},
 
+		initBundleList: function() {
+			var bundleListEl = this.$el.find('.bundle-list');
+			var DocumentListCollection = require('collections/DocumentListCollection');
+			var bundleCollection = new DocumentListCollection();
+			bundleCollection.on('reset', _.bind(function() {
+				_.each(bundleCollection.models, function(model) {
+					bundleListEl.append('<a href="#document/'+model.get('id')+'" class="thumb'+(model.get('id') == this.model.get('id') ? ' selected' : '')+'" style="background-image: url(http://cdh-vir-1.it.gu.se:8004/images/255x/'+model.get('image')+'.jpg)"></a>');
+				}, this);
+			}, this));
+			bundleCollection.byBundle(this.model.get('bundle'), null, true);
+		},
+
 		render: function() {
 			var template = _.template($("#documentViewTemplate").html());
 
@@ -66,6 +83,10 @@ define(function(require){
 			this.initBindings();
 
 			this.initDataSelects();
+
+			if (this.$el.find('.bundle-list')) {
+				this.initBundleList();
+			}
 
 			return this;
 		},
