@@ -30,11 +30,11 @@ define(function(require){
 		},
 
 		saveButtonClick: function() {
-			this.model.url = config.apiUrl+'/document/'+this.options.placeId;
+			this.model.url = config.apiUrl+'/bundle/'+this.options.bundleId;
 			this.model.save(null, {
 				success: _.bind(function() {
 					this.render();
-					this.options.app.showMessage('Place entry saved.')
+					this.options.app.showMessage('Bundle entry saved.')
 				}, this),
 				type: 'POST'
 			});

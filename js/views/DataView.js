@@ -97,7 +97,12 @@ define(function(require){
 								}
 							}
 						}
-						assignValue(bindPropertyKey, bindProperty, value);
+						if ($(el).attr('type') == 'checkbox') {
+							assignValue(bindPropertyKey, bindProperty, $(el).is(':checked'));
+						}
+						else {
+							assignValue(bindPropertyKey, bindProperty, value);
+						}
 					}, this));
 /*
 					this.model.on('change:'+bindProperty, _.bind(function() {

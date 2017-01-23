@@ -240,6 +240,7 @@
 
 	<div class="row">
 		<div class="twelve columns">
+
 			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
 			<h5><%= model.get('subtitle') %></h5>
 		</div>
@@ -263,24 +264,42 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="twelve columns">
+			<% if (model.get('bundle')) { %>
 
-					<% if (model.get('bundle')) { %>
+				<div class="row">
+					<div class="nine columns">
 						<label for="bundleInput">Bundle:</label>
 						<input class="u-full-width" type="text" data-bind="bundle" value="<%= model.get('bundle') %>" id="bundleInput">
+					</div>
+					<div class="three columns">
+						<label for="orderInput">Bundle order:</label>
+						<input class="u-full-width" type="text" data-bind="page" data-bind-key="order" value="<%= model.get('page').order %>" id="orderInput">
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="twelve columns">
 						<a href="#bundle/<%= model.get('bundle') %>">View bundle</a>
 						<div class="bundle-list small-thumb-list"></div>
-					<% } %>
-
+					</div>
 				</div>
-			</div>
+
+			<% } %>
 
 			<div class="row">
-				<div class="twelve columns">
+
+				<div class="six columns">
 					<label for="descriptionInput">Description:</label>
 					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
 				</div>
+
+				<div class="six columns">
+					<div class="data-select-wrapper" data-endpoint="/genres">
+						<label for="personsInput">Genre:</label>
+						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="genre" data-formatter="nl-array"><%= model.get('genre')? model.get('genre').join('\n') : '' %></textarea>
+					</div>
+				</div>
+
 			</div>
 
 			<div class="row">
@@ -342,8 +361,9 @@
 		</div>
 
 		<div class="four columns">
+			<label class="u-pull-right"><input type="checkbox" data-bind="published" <%= model.get('published') ? 'checked' : '' %> /> Published</label>
 			<label>Image:</label>
-			<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a><br/><a href="http://cdh-vir-1.it.gu.se:8004/images/<%= model.get('image')+'.jpg' %>" target="_blank">View full size</a>
+			<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a><br/><%= model.get('image') %> <a href="http://cdh-vir-1.it.gu.se:8004/images/<%= model.get('image')+'.jpg' %>" target="_blank">View full size</a>
 
 			<% if (model.get('color')) { %>
 				<div class="row">
@@ -356,7 +376,7 @@
 				</div>
 
 				<div class="row">
-					<div class="six columns">
+					<div class="twelve columns">
 
 						<label>Color palette:</label>
 						<div class="color-list">
@@ -366,11 +386,14 @@
 						</div>
 
 					</div>
-					<div class="six columns">
+				</div>
 
-						<label>Color palette (mapped):</label>
+				<div class="row">
+					<div class="twelve columns">
+
+						<label>Vibrant colors</label>
 						<div class="color-list">
-							<% _.each(model.get('color').colors.five_mapped, function(color) { %>
+							<% _.each(model.get('color').colors.vibrant, function(color) { %>
 								<div class="color" style="background-color: <%= color.hex %>"></div>
 							<% }) %>
 						</div>
@@ -388,16 +411,9 @@
 	<h5>Artwork</h5>
 
 	<div class="row">
-		<div class="six columns">
-			<label for="technicInput">Technique:</label>
-			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="value" value="<%= model.get('technic') ? model.get('technic').value : '' %>" id="technicInput">
-		</div>
-
-		<div class="six columns">
-			<div class="data-select-wrapper" data-endpoint="/material">
-				<label for="technicMaterialInput">Material:</label>
-				<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="material" data-formatter="nl-array"><%= model.get('material') && model.get('material').join ? model.get('material').join('\n') : '' %></textarea>
-			</div>
+		<div class="twelve columns">
+			<label for="technicMaterialInput">Technique and material:</label>
+			<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="technique_material"><%= model.get('technique_material') %></textarea>
 		</div>
 <!--
 		<div class="six columns">
@@ -409,12 +425,12 @@
 
 	<div class="row">
 		<div class="six columns">
-			<label for="innerWidthInput">Inner width:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput">
-		</div>
-		<div class="six columns">
 			<label for="innerHeightInput">Inner height:</label>
 			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.height" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.height : '' %>" id="innerHeightInput">
+		</div>
+		<div class="six columns">
+			<label for="innerWidthInput">Inner width:</label>
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput">
 		</div>
 <!--
 		<div class="four columns">
@@ -426,12 +442,12 @@
 
 	<div class="row">
 		<div class="six columns">
-			<label for="outerWidthInput">Outer width:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput">
-		</div>
-		<div class="six columns">
 			<label for="outerHeightInput">Outer height:</label>
 			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.height" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.height : '' %>" id="outerHeightInput">
+		</div>
+		<div class="six columns">
+			<label for="outerWidthInput">Outer width:</label>
+			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput">
 		</div>
 <!--
 		<div class="four columns">
@@ -465,24 +481,32 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="six columns">
+			<label for="signatureInput">Signature:</label>
+			<input id="signatureInput" rows="10" class="u-full-width" type="text" data-bind="signature" value="<%= model.get('signature') %>" />
+		</div>
+
+		<div class="six columns">
+			<label for="inscriptionInput">Inscription/påskrift:</label>
+			<input id="inscriptionInput" rows="10" class="u-full-width" type="text" data-bind="inscription" value="<%= model.get('inscription') %>" />
+		</div>
+	</div>
+
 	<hr/>
 
 	<h5>Letter metadata</h5>
 
 	<div class="row">
-		<div class="three columns">
-			<label for="senderFirstNameInput">Sender first name:</label>
-			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="firstname" value="<%= model.get('sender') ? model.get('sender').firstname : '' %>" id="senderFirstNameInput">
+		<div class="four columns">
+			<label for="senderFirstNameInput">Sender name:</label>
+			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="name" value="<%= model.get('sender') ? model.get('sender').name : '' %>" id="senderFirstNameInput">
 		</div>
-		<div class="three columns">
-			<label for="senderSurnameInput">Sender surname:</label>
-			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="surname" value="<%= model.get('sender') ? model.get('sender').surname : '' %>" id="senderSurnameInput">
-		</div>
-		<div class="three columns">
+		<div class="four columns">
 			<label for="senderBirthYearInput">Sender birth year:</label>
 			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="birth_year" value="<%= model.get('sender') ? model.get('sender').birth_year : '' %>" id="senderBirthYearInput">
 		</div>
-		<div class="three columns">
+		<div class="four columns">
 			<label for="senderDeathYearInput">Sender death year:</label>
 			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="death_year" value="<%= model.get('sender') ? model.get('sender').death_year : '' %>" id="senderDeathYearInput">
 		</div>
@@ -490,23 +514,26 @@
 	</div>
 
 	<div class="row">
-		<div class="three columns">
-			<label for="recipientFirstNameInput">Recipient first name:</label>
-			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="firstname" value="<%= model.get('recipient') ? model.get('recipient').firstname : '' %>" id="recipientFirstNameInput">
+		<div class="four columns">
+			<label for="recipientFirstNameInput">Recipient name:</label>
+			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="name" value="<%= model.get('recipient') ? model.get('recipient').name : '' %>" id="recipientFirstNameInput">
 		</div>
-		<div class="three columns">
-			<label for="recipientSurnameInput">Recipient surname:</label>
-			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="surname" value="<%= model.get('recipient') ? model.get('recipient').surname : '' %>" id="recipientSurnameInput">
-		</div>
-		<div class="three columns">
+		<div class="four columns">
 			<label for="recipientBirthYearInput">Recipient birth year:</label>
 			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="birth_year" value="<%= model.get('recipient') ? model.get('recipient').birth_year : '' %>" id="recipientBirthYearInput">
 		</div>
-		<div class="three columns">
+		<div class="four columns">
 			<label for="recipientDeathYearInput">Recipient death year:</label>
 			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="death_year" value="<%= model.get('recipient') ? model.get('recipient').death_year : '' %>" id="recipientDeathYearInput">
 		</div>
 
+	</div>
+
+	<div class="row">
+		<div class="twelve columns">
+			<label for="contentInput">Content:</label>
+			<textarea id="contentInput" class="u-full-width" type="text" data-bind="content"><%= model.get('content') %></textarea>
+		</div>
 	</div>
 
 	<hr/>
