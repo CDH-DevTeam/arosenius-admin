@@ -40,6 +40,21 @@ define(function(require){
 			});
 		},
 
+		byIDs: function(IDs, page, showAll) {
+			this.searchQuery = '';
+			this.currentPage = page;
+
+			this.fetch({
+				reset: true,
+				beforeSend: authHelper.sendAuthentication,
+				data: {
+					page: this.currentPage,
+					ids: IDs,
+					showAll: showAll ? true : false
+				}
+			});
+		},
+
 		getPage: function(page, museum, type, searchQuery) {
 			this.currentPage = page;
 

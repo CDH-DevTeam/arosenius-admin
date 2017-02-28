@@ -96,7 +96,7 @@
 					<span class="page-info"></span>
 				</div>
 				<div class="eight columns">
-					<div style="display: none" class="combine-controls">
+					<div style="display: none" class="document-controls">
 						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
 						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
 					</div>
@@ -165,9 +165,8 @@
 					<span class="page-info"></span>
 				</div>
 				<div class="eight columns">
-					<div style="display: none" class="combine-controls">
-						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
-						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
+					<div style="display: none" class="document-controls">
+						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> bilder i en ny bundel</a
 					</div>
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
@@ -186,6 +185,11 @@
 
 	<% _.each(models, function(model) { %>
 		<a class="grid-item" href="#document/<%= model.get('id') %>" data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('image')+'.jpg' %>')">
+
+			<% if (!hideCheckBoxes) { %>
+				<input data-id="<%= model.get('id') %>" type="checkbox" class="item-check" />
+			<% } %>
+
 			<div class="item-title"><%= model.get('title') %></div>
 		</a>
 	<% }); %>
@@ -219,9 +223,8 @@
 					<span class="page-info"></span>
 				</div>
 				<div class="eight columns">
-					<div style="display: none" class="combine-controls">
-						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Combine <span class="checked-number"></span> places</a>
-						<select class="u-pull-left combine-places-select u-full-width" style="max-width: 30%"></select>
+					<div style="display: none" class="document-controls">
+						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> bilder i en ny bundel</a
 					</div>
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
@@ -267,13 +270,19 @@
 			<% if (model.get('bundle')) { %>
 
 				<div class="row">
-					<div class="nine columns">
+					<div class="five columns">
 						<label for="bundleInput">Bundle:</label>
 						<input class="u-full-width" type="text" data-bind="bundle" value="<%= model.get('bundle') %>" id="bundleInput">
 					</div>
 					<div class="three columns">
 						<label for="orderInput">Bundle order:</label>
 						<input class="u-full-width" type="text" data-bind="page" data-bind-key="order" value="<%= model.get('page').order %>" id="orderInput">
+					</div>
+					<div class="four columns">
+						<div class="data-select-wrapper" data-endpoint="/pagetypes">
+							<label for="pageSideInput">Page type:</label>
+							<input class="u-full-width" type="text" data-bind="page" data-bind-key="side" value="<%= model.get('page').side %>" id="pageSideInput">
+						</div>
 					</div>
 				</div>
 
@@ -569,6 +578,55 @@
 		<div class="six columns">
 			<label for="descriptionInput">Description:</label>
 			<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
+		</div>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a class="button" onclick="javascript:history.go(-1)">Go back</a>
+					<a class="button button-primary u-pull-right save-button">Save</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+
+	<div class="image-list-container">
+		<div class="list-container grid-container"></div>
+	</div>
+
+</script>
+
+<script type="text/template" id="newBundleViewTemplate">
+
+	<div class="row">
+		<div class="twelve columns">
+			<h2 style="margin-bottom: 10px">New bundle</h2>
+		</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="four columns">
+			<label for="titleInput">Title:</label>
+			<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput">
+		</div>
+		<div class="four columns">
+			<label for="descriptionInput">Description:</label>
+			<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
+		</div>
+		<div class="four columns">
+
+			<div class="data-select-wrapper" data-endpoint="/museums">
+				<label for="collMuseumInput">Museum:</label>
+				<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= model.get('collection').museum %>" id="collMuseumInput">
+			</div>
+
+
 		</div>
 	</div>
 

@@ -31,6 +31,7 @@ define(function(require){
 
 		initDataSelects: function() {
 			_.each(this.$el.find('.data-select-wrapper'), _.bind(function(el) {
+				console.log('data-select-wrapper')
 				var optionsCollection = new Backbone.Collection();
 				optionsCollection.url = config.publicApiUrl+$(el).data('endpoint');
 				optionsCollection.on('reset', function() {
@@ -47,10 +48,20 @@ define(function(require){
 						var selectedValue = selectEl.find(":selected").text();
 
 						if (selectedValue != '...') {
-							$(el).find('textarea').val(selectedValue+'\n'+$(el).find('textarea').val());
-							setTimeout(function() {
-								$(el).find('textarea').change();
-							}, 100);
+							if ($(el).find('textarea').length > 0) {
+								console.log('update textarea');
+								$(el).find('textarea').val(selectedValue+'\n'+$(el).find('textarea').val());
+								setTimeout(function() {
+									$(el).find('textarea').change();
+								}, 100);								
+							}
+							else if ($(el).find('input').length > 0) {
+								console.log('update input');
+								$(el).find('input').val(selectedValue);
+								setTimeout(function() {
+									$(el).find('input').change();
+								}, 100);								
+							}
 							selectEl.val('...');
 						}
 					});

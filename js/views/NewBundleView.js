@@ -17,12 +17,24 @@ define(function(require){
 		initialize: function(options) {
 			this.options = options;
 
+			console.log(this.options);
+
 			this.model = new DataModel();
-			this.model.once('change', this.render, this);
-			this.model.url = config.apiUrl+'/bundle/'+this.options.bundleId;
-			this.model.fetch({
-				beforeSend: authHelper.sendAuthentication
+			this.model.set({
+				title: 'New bundle',
+				description: '',
+				collection: {
+					museum: ''
+				}
 			});
+
+			this.model.url = config.apiUrl+'/bundle/new/';
+
+			this.model.set({
+				documents: this.options.documentIds.split(';')
+			});
+
+			this.render();
 		},
 
 		events: {
@@ -30,19 +42,24 @@ define(function(require){
 		},
 
 		saveButtonClick: function() {
-			this.model.url = config.apiUrl+'/bundle/'+this.options.bundleId;
+			this.model.url = config.apiUrl+'/bundle';
 			this.model.save(null, {
 				beforeSend: authHelper.sendAuthentication,
-				success: _.bind(function() {
-					this.render();
-					this.options.app.showMessage('Bundle entry saved.')
+				success: _.bind(function(response) {
+					this.options.app.showMessage('Bundle entry saved.');
+
+					setTimeout(_.bind(function() {
+						this.options.router.navigate('bundle/'+this.model.attributes._id, {
+							trigger: true
+						});
+					}, this), 1000);
 				}, this),
-				type: 'POST'
+				type: 'PUT'
 			});
 		},
 
 		render: function() {
-			var template = _.template($("#bundleViewTemplate").html());
+			var template = _.template($("#newBundleViewTemplate").html());
 
 			this.$el.html(template({
 				model: this.model
@@ -50,7 +67,7 @@ define(function(require){
 
 			this.documentList = new DocumentsListView({
 				el: this.$el.find('.image-list-container'),
-				bundle: this.model.get('bundle'),
+				documentIds: this.options.documentIds,
 				renderUI: false,
 				viewMode: 'grid',
 				hideCheckBoxes: true,
@@ -58,6 +75,9 @@ define(function(require){
 			});
 
 			this.initBindings();
+
+			this.initDataSelects();
+
 			return this;
 		},
 

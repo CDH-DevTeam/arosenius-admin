@@ -40,6 +40,9 @@ define(function(require){
 			this.router.on('route:bundle', _.bind(function(bundleId) {
 				this.showBundleView(bundleId);
 			}, this));
+			this.router.on('route:newbundle', _.bind(function(documentIds) {
+				this.showNewBundleView(documentIds);
+			}, this));
 			Backbone.history.start();
 		},
 
@@ -140,6 +143,23 @@ define(function(require){
 				this.mainView = new BundleView({
 					el: this.$el.find('.view-container'),
 					bundleId: bundleId,
+					router: this.router,
+					app: this
+				});
+			}
+		},
+
+		showNewBundleView: function(documentIds) {
+			if (this.currentView != 'NewBundleView') {
+				this.currentView = 'NewBundleView';
+
+				var NewBundleView = require('views/NewBundleView');
+				if (this.mainView != undefined) {
+					this.mainView.destroy();
+				}
+				this.mainView = new NewBundleView({
+					el: this.$el.find('.view-container'),
+					documentIds: documentIds,
 					router: this.router,
 					app: this
 				});

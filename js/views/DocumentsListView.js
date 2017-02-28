@@ -26,6 +26,9 @@ define(function(require){
 			if (this.options.bundle != undefined) {
 				this.collection.byBundle(this.options.bundle, 0, this.options.showAll);
 			}
+			else if (this.options.documentIds != undefined) {
+				this.collection.byIDs(this.options.documentIds, 0, this.options.showAll);
+			}
 			else {
 				this.collection.getPage(this.options.page, this.options.museum, this.options.type, this.options.searchQuery);
 			}
@@ -46,7 +49,7 @@ define(function(require){
 				this.renderUI();
 			}
 
-			this.on('listCheckChanged', _.bind(this.placeCheckClick, this));
+			this.on('listCheckChanged', _.bind(this.documentCheckClick, this));
 			this.on('search', _.bind(function(event) {
 				if (this.options.router) {
 					this.options.router.navigate('/places/search/'+event.query);
@@ -95,24 +98,24 @@ define(function(require){
 			}
 		},
 
-		checkedPlaces: [],
+		checkedDocuments: [],
 
-		placeCheckClick: function(event) {
-			this.checkedPlaces = _.map(this.$el.find('.item-check:checked'), _.bind(function(checkBox) {
+		documentCheckClick: function(event) {
+			console.log('documentCheckClick');
+			this.checkedDocuments = _.map(this.$el.find('.item-check:checked'), _.bind(function(checkBox) {
 				return $(checkBox).data('id');
 			}, this));
 
-			if (this.checkedPlaces.length > 1) {
-				this.$el.find('.combine-controls').css('display', 'block');
-				this.$el.find('.combine-controls .checked-number').text(this.checkedPlaces.length);
+			console.log(this.checkedDocuments);
 
-				var selectOptions = _.map(this.checkedPlaces, _.bind(function(placeId) {
-					return '<option value="'+placeId+'">'+this.collection.get(placeId).get('name')+' ['+this.collection.get(placeId).get('area')+']'+(this.collection.get(placeId).get('lat') != undefined ? ' [g]' : '')+'</option>';
-				}, this));
-				this.$el.find('.combine-controls .combine-places-select').html(selectOptions);
+			if (this.checkedDocuments.length > 1) {
+				this.$el.find('.document-controls').css('display', 'block');
+				this.$el.find('.document-controls .checked-number').text(this.checkedDocuments.length);
+
+				this.$el.find('.document-controls .bundle-button').attr('href', '#bundles/new/'+this.checkedDocuments.join(';'));
 			}
 			else {
-				this.$el.find('.combine-controls').css('display', 'none');
+				this.$el.find('.document-controls').css('display', 'none');
 			}
 		},
 
@@ -131,8 +134,6 @@ define(function(require){
 
 			this.renderUI();
 			this.render();
-			console.log(this.options);
-			console.log('-');
 		},
 
 		updateOptions: function() {
@@ -215,10 +216,13 @@ define(function(require){
 			console.log('DocumentsListView: renderList');
 			var template = _.template($(this.viewMode == 'grid' ? "#documentGridTemplate" : "#documentListTemplate").html());
 			this.$el.find('.list-container').html(template({
-				models: this.collection.models
+				models: this.collection.models,
+				hideCheckBoxes: this.options.hideCheckBoxes
 			}));
-			this.$el.find('.item-check').click(_.bind(this.placeCheckClick, this));
-			this.placeCheckClick();
+			
+			this.$el.find('.item-check').click(_.bind(this.documentCheckClick, this));
+
+			this.documentCheckClick();
 		}
 	});
 });
