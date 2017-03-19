@@ -101,21 +101,24 @@ define(function(require){
 		checkedDocuments: [],
 
 		documentCheckClick: function(event) {
-			console.log('documentCheckClick');
 			this.checkedDocuments = _.map(this.$el.find('.item-check:checked'), _.bind(function(checkBox) {
 				return $(checkBox).data('id');
 			}, this));
-
-			console.log(this.checkedDocuments);
 
 			if (this.checkedDocuments.length > 1) {
 				this.$el.find('.document-controls').css('display', 'block');
 				this.$el.find('.document-controls .checked-number').text(this.checkedDocuments.length);
 
 				this.$el.find('.document-controls .bundle-button').attr('href', '#bundles/new/'+this.checkedDocuments.join(';'));
+
+				this.$el.find('.document-controls .combine-button').attr('href', '#documents/combine/'+this.checkedDocuments.join(';'));
 			}
 			else {
 				this.$el.find('.document-controls').css('display', 'none');
+			}
+
+			if (this.options.onSelect) {
+				this.options.onSelect(this.checkedDocuments);
 			}
 		},
 
@@ -217,7 +220,9 @@ define(function(require){
 			var template = _.template($(this.viewMode == 'grid' ? "#documentGridTemplate" : "#documentListTemplate").html());
 			this.$el.find('.list-container').html(template({
 				models: this.collection.models,
-				hideCheckBoxes: this.options.hideCheckBoxes
+				hideCheckBoxes: this.options.hideCheckBoxes,
+				showRadioBoxes: this.options.showRadioBoxes,
+				enableLinks: !this.options.disableLinks
 			}));
 			
 			this.$el.find('.item-check').click(_.bind(this.documentCheckClick, this));

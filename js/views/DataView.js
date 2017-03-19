@@ -73,16 +73,24 @@ define(function(require){
 		},
 
 		initBindings: function() {
-			var assignValue = _.bind(function(bindPropertyKey, bindProperty, value) {
+			console.log('initBindings');
+			var assignValue = _.bind(function(bindPropertyKey, bindProperty, value, bindPropertyIndex) {
 
 				if (bindPropertyKey != undefined) {
 					var attribute = this.model.get(bindProperty) ? this.model.get(bindProperty) : {};
+					console.log('bindPropertyIndex');
+					console.log(bindPropertyIndex);
 
 					if (bindPropertyKey.indexOf('.') > -1) {
-						this.objReference(attribute, bindPropertyKey, value);
+						this.objReference(bindPropertyIndex !== undefined ? attribute[bindPropertyIndex] : attribute, bindPropertyKey, value);
 					}
 					else {
-						attribute[bindPropertyKey] = value;
+						if (bindPropertyIndex !== undefined) {
+							attribute[bindPropertyIndex][bindPropertyKey] = value;
+						}
+						else {
+							attribute[bindPropertyKey] = value;
+						}
 					}
 
 					this.model.set(bindProperty, attribute);
@@ -95,6 +103,7 @@ define(function(require){
 			_.each(this.$el.find('[data-bind]'), _.bind(function(el) {
 				var bindProperty = $(el).data('bind');
 				var bindPropertyKey = $(el).data('bind-key');
+				var bindPropertyIndex = $(el).data('bind-index');
 				var bindFormatter = $(el).data('formatter');
 
 				if ($(el).is('input') || $(el).is('textarea')) {
@@ -109,28 +118,18 @@ define(function(require){
 							}
 						}
 						if ($(el).attr('type') == 'checkbox') {
-							assignValue(bindPropertyKey, bindProperty, $(el).is(':checked'));
+							assignValue(bindPropertyKey, bindProperty, $(el).is(':checked'), bindPropertyIndex);
 						}
 						else {
-							assignValue(bindPropertyKey, bindProperty, value);
+							assignValue(bindPropertyKey, bindProperty, value, bindPropertyIndex);
 						}
 					}, this));
-/*
-					this.model.on('change:'+bindProperty, _.bind(function() {
-						$(el).val(this.model.get(bindProperty));
-					}, this));
-*/
 				}
 
 				if ($(el).is('select')) {
 					$(el).change(_.bind(function() {
-						assignValue(bindPropertyKey, bindProperty, $(el).val());
+						assignValue(bindPropertyKey, bindProperty, $(el).val(), bindPropertyIndex);
 					}, this));
-/*
-					this.model.on('change:'+bindProperty, _.bind(function() {
-						$(el).val(this.model.get(bindProperty));
-					}, this));
-*/
 				}
 			}, this));
 		},

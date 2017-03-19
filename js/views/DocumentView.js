@@ -35,6 +35,16 @@ define(function(require){
 		},
 
 		saveButtonClick: function() {
+			if (this.model.get('images') && this.model.get('images').length > 0) {
+				var sortedImages = _.sortBy(this.model.get('images'), function(image) {
+					return image.page.order || 0;
+				});
+
+				this.model.set({
+					images: sortedImages
+				});
+			}
+
 			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
 			this.model.save(null, {
 				beforeSend: authHelper.sendAuthentication,
@@ -77,12 +87,15 @@ define(function(require){
 			var template = _.template($("#documentViewTemplate").html());
 
 			this.$el.html(template({
-				model: this.model
+				model: this.model,
+				readOnly: this.options.readOnly
 			}));
 
 			this.initBindings();
 
-			this.initDataSelects();
+			if (!this.options.readOnly) {
+				this.initDataSelects();
+			}
 
 			if (this.$el.find('.bundle-list')) {
 				this.initBundleList();

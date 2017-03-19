@@ -43,6 +43,9 @@ define(function(require){
 			this.router.on('route:newbundle', _.bind(function(documentIds) {
 				this.showNewBundleView(documentIds);
 			}, this));
+			this.router.on('route:combinedocuments', _.bind(function(documentIds) {
+				this.showCombineDocumentsView(documentIds);
+			}, this));
 			Backbone.history.start();
 		},
 
@@ -158,6 +161,23 @@ define(function(require){
 					this.mainView.destroy();
 				}
 				this.mainView = new NewBundleView({
+					el: this.$el.find('.view-container'),
+					documentIds: documentIds,
+					router: this.router,
+					app: this
+				});
+			}
+		},
+
+		showCombineDocumentsView: function(documentIds) {
+			if (this.currentView != 'CombineDocumentsView') {
+				this.currentView = 'CombineDocumentsView';
+
+				var CombineDocumentsView = require('views/CombineDocumentsView');
+				if (this.mainView != undefined) {
+					this.mainView.destroy();
+				}
+				this.mainView = new CombineDocumentsView({
 					el: this.$el.find('.view-container'),
 					documentIds: documentIds,
 					router: this.router,

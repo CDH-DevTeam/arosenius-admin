@@ -111,10 +111,15 @@
 	<% _.each(models, function(model) { %>
 		<tr data-id="<%= model.get('id') %>">
 			<td><input data-id="<%= model.get('id') %>" class="item-check" type="checkbox"/></td>
-			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('title') %></a></td>
-			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('subtitle') %></a></td>
-			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('type') %></a></td>
-			<td><a class="row-name" href="#document/<%= model.get('id') %>"><%= model.get('collection').museum %></a></td>
+			<td>
+				<a class="row-name" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %>"><%= model.get('title') %></a>
+				<% if (model.get('images') && model.get('images').length > 0) {%>
+					<div class="image-number"><%= model.get('images').length %></div>
+				<% } %>
+			</td>
+			<td><a class="row-name" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %>"><%= model.get('subtitle') %></a></td>
+			<td><a class="row-name" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %>"><%= model.get('type') %></a></td>
+			<td><a class="row-name" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %>"><%= model.get('collection').museum %></a></td>
 		</tr>
 	<% }); %>
 
@@ -162,7 +167,8 @@
 				</div>
 				<div class="nine columns">
 					<div style="display: none" class="document-controls">
-						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> bilder i en ny bundel</a>
+<!--						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> dokumenter i en ny bundel</a>-->
+						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Kombinera <span class="checked-number"></span> bilder</a>
 					</div>
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
@@ -179,11 +185,17 @@
 
 <script type="text/template" id="documentGridTemplate">
 
-	<% _.each(models, function(model) { %>
-		<a class="grid-item" href="#document/<%= model.get('id') %>" data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('image')+'.jpg' %>')">
+	<% _.each(models, function(model, index) { %>
+		<a class="grid-item" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %> data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= (model.get('images') && model.get('images').length > 0 ? model.get('images')[0].image : model.get('image'))+'.jpg' %>')">
 
-			<% if (!hideCheckBoxes) { %>
+			<% if (showRadioBoxes) { %>
+				<input data-id="<%= model.get('id') %>" type="radio" name="selected-document" class="item-check" <%= index == 0 ? 'checked="checked"' : '' %> />
+			<% } else if (!hideCheckBoxes) { %>
 				<input data-id="<%= model.get('id') %>" type="checkbox" class="item-check" />
+			<% } %>
+
+			<% if (model.get('images') && model.get('images').length > 0) {%>
+				<div class="image-number"><%= model.get('images').length %></div>
 			<% } %>
 
 			<div class="item-title"><%= model.get('title') %></div>
@@ -220,7 +232,8 @@
 				</div>
 				<div class="nine columns">
 					<div style="display: none" class="document-controls">
-						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> bilder i en ny bundel</a>
+<!--						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> dokumenter i en ny bundel</a>-->
+						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Kombinera <span class="checked-number"></span> bilder</a>
 					</div>
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
@@ -241,67 +254,42 @@
 		<div class="twelve columns">
 
 			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
-			<h5><%= model.get('subtitle') %></h5>
+			<%= model.get('subtitle') && model.get('subtitle') != '' ? '<h5>'+model.get('subtitle')+'</h5>' : '' %>
+
 		</div>
 	</div>
 
 	<hr/>
 
 	<div class="row">
-		<div class="eight columns">
+		<div class="nine columns">
+
+			<label><input type="checkbox" data-bind="published" <%= model.get('published') ? 'checked' : '' %>  <%= readOnly ? 'disabled="disabled"' : '' %>/> Published</label>
 
 			<div class="row">
 				<div class="six columns">
 					<label for="titleInput">Title:</label>
-					<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput">
+					<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput" <%= readOnly ? 'readonly' : '' %>>
 
 				</div>
 
 				<div class="six columns">
 					<label for="subtitleInput">Subtitle:</label>
-					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= model.get('subtitle') %>" id="subtitleInput">
+					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= model.get('subtitle') %>" id="subtitleInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 			</div>
-
-			<% if (model.get('bundle')) { %>
-
-				<div class="row">
-					<div class="five columns">
-						<label for="bundleInput">Bundle:</label>
-						<input class="u-full-width" type="text" data-bind="bundle" value="<%= model.get('bundle') %>" id="bundleInput">
-					</div>
-					<div class="three columns">
-						<label for="orderInput">Bundle order:</label>
-						<input class="u-full-width" type="text" data-bind="page" data-bind-key="order" value="<%= model.get('page').order %>" id="orderInput">
-					</div>
-					<div class="four columns">
-						<div class="data-select-wrapper" data-endpoint="/pagetypes">
-							<label for="pageSideInput">Page type:</label>
-							<input class="u-full-width" type="text" data-bind="page" data-bind-key="side" value="<%= model.get('page').side %>" id="pageSideInput">
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="twelve columns">
-						<a href="#bundle/<%= model.get('bundle') %>">View bundle</a>
-						<div class="bundle-list small-thumb-list"></div>
-					</div>
-				</div>
-
-			<% } %>
 
 			<div class="row">
 
 				<div class="six columns">
 					<label for="descriptionInput">Description:</label>
-					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description"><%= model.get('description') %></textarea>
+					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description" <%= readOnly ? 'readonly' : '' %>><%= model.get('description') %></textarea>
 				</div>
 
 				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/genres">
 						<label for="personsInput">Genre:</label>
-						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="genre" data-formatter="nl-array"><%= model.get('genre')? model.get('genre').join('\n') : '' %></textarea>
+						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="genre" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('genre')? model.get('genre').join('\n') : '' %></textarea>
 					</div>
 				</div>
 
@@ -311,12 +299,12 @@
 				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/types">
 						<label for="typeInput">Document Type:</label>
-						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array"><%= model.get('type')? model.get('type').join('\n') : '' %></textarea>
+						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('type')? model.get('type').join('\n') : '' %></textarea>
 					</div>
 
 					<div class="data-select-wrapper" data-endpoint="/tags">
 						<label for="tagsInput">Tags:</label>
-						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array"><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
+						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
 					</div>
 				</div>
 
@@ -324,12 +312,12 @@
 
 					<div class="data-select-wrapper" data-endpoint="/persons">
 						<label for="personsInput">Persons:</label>
-						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="persons" data-formatter="nl-array"><%= model.get('persons')? model.get('persons').join('\n') : '' %></textarea>
+						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="persons" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('persons')? model.get('persons').join('\n') : '' %></textarea>
 					</div>
 
 					<div class="data-select-wrapper" data-endpoint="/places">
 						<label for="placesInput">Places:</label>
-						<textarea id="placesInput" class="u-full-width textarea-list" type="text" data-bind="places" data-formatter="nl-array"><%= model.get('places')? model.get('places').join('\n') : '' %></textarea>
+						<textarea id="placesInput" class="u-full-width textarea-list" type="text" data-bind="places" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('places')? model.get('places').join('\n') : '' %></textarea>
 					</div>
 				</div>
 			</div>
@@ -337,12 +325,12 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="dateInput">Date:</label>
-					<input class="u-full-width" type="text" data-bind="item_date" value="<%= model.get('item_date') %>" id="dateInput">
+					<input class="u-full-width" type="text" data-bind="item_date" value="<%= model.get('item_date') %>" id="dateInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 
 				<div class="six columns">
 					<label for="ceatorInput">Creator:</label>
-					<input class="u-full-width" type="text" data-bind="creator" value="<%= model.get('creator') %>" id="ceatorInput">
+					<input class="u-full-width" type="text" data-bind="creator" value="<%= model.get('creator') %>" id="ceatorInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 			</div>
 
@@ -353,7 +341,7 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="collMuseumInput">Museum:</label>
-					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= model.get('collection').museum %>" id="collMuseumInput">
+					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= model.get('collection').museum %>" id="collMuseumInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 
 				<div class="six columns">
@@ -363,12 +351,193 @@
 			</div>
 
 
+			<hr/>
+
+			<h5>Artwork</h5>
+
+			<div class="row">
+				<div class="twelve columns">
+					<label for="technicMaterialInput">Technique and material:</label>
+					<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="technique_material" <%= readOnly ? 'readonly' : '' %>><%= model.get('technique_material') %></textarea>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="innerHeightInput">Inner height:</label>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.height" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.height : '' %>" id="innerHeightInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+				<div class="six columns">
+					<label for="innerWidthInput">Inner width:</label>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="outerHeightInput">Outer height:</label>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.height" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.height : '' %>" id="outerHeightInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+				<div class="six columns">
+					<label for="outerWidthInput">Outer width:</label>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="acquisitionInput">Acquisition:</label>
+					<textarea class="u-full-width" rows="10" data-bind="acquisition" id="acquisitionInput" <%= readOnly ? 'readonly' : '' %>><%= model.get('acquisition') ? model.get('acquisition') : '' %></textarea>
+				</div>
+
+				<div class="six columns">
+					<label for="reproductionsInput">Reproductions:</label>
+					<textarea id="reproductionsInput" rows="10" class="u-full-width" type="text" data-bind="reproductions" <%= readOnly ? 'readonly' : '' %>><%= model.get('reproductions') %></textarea>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="literatureInput">Literature:</label>
+					<textarea id="literatureInput" rows="10" class="u-full-width" type="text" data-bind="literature" <%= readOnly ? 'readonly' : '' %>><%= model.get('literature') %></textarea>
+				</div>
+
+				<div class="six columns">
+					<label for="exhibitionsInput">Exhibitions:</label>
+					<textarea id="exhibitionsInput" rows="10" class="u-full-width" type="text" data-bind="exhibitions" <%= readOnly ? 'readonly' : '' %>><%= model.get('exhibitions') %></textarea>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="six columns">
+					<label for="signatureInput">Signature:</label>
+					<input id="signatureInput" rows="10" class="u-full-width" type="text" data-bind="signature" value="<%= model.get('signature') %>" <%= readOnly ? 'readonly' : '' %> />
+				</div>
+
+				<div class="six columns">
+					<label for="inscriptionInput">Inscription/påskrift:</label>
+					<input id="inscriptionInput" rows="10" class="u-full-width" type="text" data-bind="inscription" value="<%= model.get('inscription') %>" <%= readOnly ? 'readonly' : '' %> />
+				</div>
+			</div>
+
+			<hr/>
+
+			<h5>Letter metadata</h5>
+
+			<div class="row">
+				<div class="four columns">
+					<label for="senderFirstNameInput">Sender name:</label>
+					<input class="u-full-width" type="text" data-bind="sender" data-bind-key="name" value="<%= model.get('sender') ? model.get('sender').name : '' %>" id="senderFirstNameInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+				<div class="four columns">
+					<label for="senderBirthYearInput">Sender birth year:</label>
+					<input class="u-full-width" type="text" data-bind="sender" data-bind-key="birth_year" value="<%= model.get('sender') ? model.get('sender').birth_year : '' %>" id="senderBirthYearInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+				<div class="four columns">
+					<label for="senderDeathYearInput">Sender death year:</label>
+					<input class="u-full-width" type="text" data-bind="sender" data-bind-key="death_year" value="<%= model.get('sender') ? model.get('sender').death_year : '' %>" id="senderDeathYearInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="four columns">
+					<label for="recipientFirstNameInput">Recipient name:</label>
+					<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="name" value="<%= model.get('recipient') ? model.get('recipient').name : '' %>" id="recipientFirstNameInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+				<div class="four columns">
+					<label for="recipientBirthYearInput">Recipient birth year:</label>
+					<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="birth_year" value="<%= model.get('recipient') ? model.get('recipient').birth_year : '' %>" id="recipientBirthYearInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+				<div class="four columns">
+					<label for="recipientDeathYearInput">Recipient death year:</label>
+					<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="death_year" value="<%= model.get('recipient') ? model.get('recipient').death_year : '' %>" id="recipientDeathYearInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="twelve columns">
+					<label for="contentInput">Content:</label>
+					<textarea id="contentInput" class="u-full-width" type="text" data-bind="content" <%= readOnly ? 'readonly' : '' %>><%= model.get('content') %></textarea>
+				</div>
+			</div>
+
+			<% if (model.get('bundle')) { %>
+
+				<div class="frame-container">
+
+					<h5>Bundle</h5>
+
+					<div class="row">
+						<div class="five columns">
+							<label for="bundleInput">Bundle:</label>
+							<input class="u-full-width" type="text" data-bind="bundle" value="<%= model.get('bundle') %>" id="bundleInput" <%= readOnly ? 'readonly' : '' %>>
+						</div>
+						<div class="three columns">
+							<label for="orderInput">Bundle order:</label>
+							<input class="u-full-width" type="text" data-bind="page" data-bind-key="order" value="<%= model.get('page').order %>" id="orderInput" <%= readOnly ? 'readonly' : '' %>>
+						</div>
+						<div class="four columns">
+							<div class="data-select-wrapper" data-endpoint="/pagetypes">
+								<label for="pageSideInput">Page type:</label>
+								<input class="u-full-width" type="text" data-bind="page" data-bind-key="side" value="<%= model.get('page').side %>" id="pageSideInput" <%= readOnly ? 'readonly' : '' %>>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="twelve columns">
+							<a href="#bundle/<%= model.get('bundle') %>">View bundle</a>
+							<div class="bundle-list small-thumb-list"></div>
+						</div>
+					</div>
+
+				</div>
+
+			<% } %>
+
 		</div>
 
-		<div class="four columns">
-			<label class="u-pull-right"><input type="checkbox" data-bind="published" <%= model.get('published') ? 'checked' : '' %> /> Published</label>
-			<label>Image:</label>
-			<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a><br/><%= model.get('image') %> <a href="http://cdh-vir-1.it.gu.se:8004/images/<%= model.get('image')+'.jpg' %>" target="_blank">View full size</a>
+		<div class="three columns">
+			<% if (model.get('images')) { %>
+				<label>Images:</label>
+
+				<% _.each(model.get('images'), function(image, index) { %>
+
+					<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= image.image+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= image.image+'.jpg' %>" class="archive-image"/></a><br/><%= image.image %> <a href="http://cdh-vir-1.it.gu.se:8004/images/<%= image.image+'.jpg' %>" target="_blank">View full size</a><br/><br/>
+
+					<% if (image.color) { %>
+						<div class="color-list">
+							<% _.each(image.color.colors.five, function(color) { %>
+								<div class="color" style="background-color: <%= color.hex %>"></div>
+							<% }) %>
+						</div>
+					<% } %>
+
+					<div class="row">
+
+						<div class="six columns">
+							<label for="orderInput<%= index %>">Order:</label>
+							<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.order" value="<%= image.page.order %>" id="orderInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
+						</div>
+
+						<div class="six columns">
+							<div class="data-select-wrapper" data-endpoint="/pagetypes">
+								<label for="pageSideInput<%= index %>">Page type:</label>
+								<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.side" value="<%= image.page.side %>" id="pageSideInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
+							</div>
+						</div>
+
+					</div>
+					<hr/>
+
+				<% }) %>
+
+			<% } else { %>
+				<label>Image:</label>
+				<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>" class="archive-image"/></a><br/><%= model.get('image') %> <a href="http://cdh-vir-1.it.gu.se:8004/images/<%= model.get('image')+'.jpg' %>" target="_blank">View full size</a>
+			<% } %>
 
 			<% if (model.get('color')) { %>
 				<div class="row">
@@ -409,136 +578,6 @@
 			<% } %>
 		</div>
 
-	</div>
-
-	<hr/>
-
-	<h5>Artwork</h5>
-
-	<div class="row">
-		<div class="twelve columns">
-			<label for="technicMaterialInput">Technique and material:</label>
-			<textarea id="technicMaterialInput" rows="10" class="u-full-width" type="text" data-bind="technique_material"><%= model.get('technique_material') %></textarea>
-		</div>
-<!--
-		<div class="six columns">
-			<label for="technicCommentInput">Technic comment:</label>
-			<input class="u-full-width" type="text" data-bind="technic" data-bind-key="comment" value="<%= model.get('technic') ? model.get('technic').comment : '' %>" id="technicCommentInput">
-		</div>
--->
-	</div>
-
-	<div class="row">
-		<div class="six columns">
-			<label for="innerHeightInput">Inner height:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.height" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.height : '' %>" id="innerHeightInput">
-		</div>
-		<div class="six columns">
-			<label for="innerWidthInput">Inner width:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput">
-		</div>
-<!--
-		<div class="four columns">
-			<label for="innerUnitInput">Inner dimensions unit:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.unit" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.unit : '' %>" id="innerUnitInput">
-		</div>
--->
-	</div>
-
-	<div class="row">
-		<div class="six columns">
-			<label for="outerHeightInput">Outer height:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.height" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.height : '' %>" id="outerHeightInput">
-		</div>
-		<div class="six columns">
-			<label for="outerWidthInput">Outer width:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput">
-		</div>
-<!--
-		<div class="four columns">
-			<label for="outerUnitInput">Outer dimensions unit:</label>
-			<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.unit" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.unit : '' %>" id="outerUnitInput">
-		</div>
--->
-	</div>
-
-	<div class="row">
-		<div class="six columns">
-			<label for="acquisitionInput">Acquisition:</label>
-			<textarea class="u-full-width" rows="10" data-bind="acquisition" id="acquisitionInput"><%= model.get('acquisition') ? model.get('acquisition') : '' %></textarea>
-		</div>
-
-		<div class="six columns">
-			<label for="reproductionsInput">Reproductions:</label>
-			<textarea id="reproductionsInput" rows="10" class="u-full-width" type="text" data-bind="reproductions"><%= model.get('reproductions') %></textarea>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="six columns">
-			<label for="literatureInput">Literature:</label>
-			<textarea id="literatureInput" rows="10" class="u-full-width" type="text" data-bind="literature"><%= model.get('literature') %></textarea>
-		</div>
-
-		<div class="six columns">
-			<label for="exhibitionsInput">Exhibitions:</label>
-			<textarea id="exhibitionsInput" rows="10" class="u-full-width" type="text" data-bind="exhibitions"><%= model.get('exhibitions') %></textarea>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="six columns">
-			<label for="signatureInput">Signature:</label>
-			<input id="signatureInput" rows="10" class="u-full-width" type="text" data-bind="signature" value="<%= model.get('signature') %>" />
-		</div>
-
-		<div class="six columns">
-			<label for="inscriptionInput">Inscription/påskrift:</label>
-			<input id="inscriptionInput" rows="10" class="u-full-width" type="text" data-bind="inscription" value="<%= model.get('inscription') %>" />
-		</div>
-	</div>
-
-	<hr/>
-
-	<h5>Letter metadata</h5>
-
-	<div class="row">
-		<div class="four columns">
-			<label for="senderFirstNameInput">Sender name:</label>
-			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="name" value="<%= model.get('sender') ? model.get('sender').name : '' %>" id="senderFirstNameInput">
-		</div>
-		<div class="four columns">
-			<label for="senderBirthYearInput">Sender birth year:</label>
-			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="birth_year" value="<%= model.get('sender') ? model.get('sender').birth_year : '' %>" id="senderBirthYearInput">
-		</div>
-		<div class="four columns">
-			<label for="senderDeathYearInput">Sender death year:</label>
-			<input class="u-full-width" type="text" data-bind="sender" data-bind-key="death_year" value="<%= model.get('sender') ? model.get('sender').death_year : '' %>" id="senderDeathYearInput">
-		</div>
-
-	</div>
-
-	<div class="row">
-		<div class="four columns">
-			<label for="recipientFirstNameInput">Recipient name:</label>
-			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="name" value="<%= model.get('recipient') ? model.get('recipient').name : '' %>" id="recipientFirstNameInput">
-		</div>
-		<div class="four columns">
-			<label for="recipientBirthYearInput">Recipient birth year:</label>
-			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="birth_year" value="<%= model.get('recipient') ? model.get('recipient').birth_year : '' %>" id="recipientBirthYearInput">
-		</div>
-		<div class="four columns">
-			<label for="recipientDeathYearInput">Recipient death year:</label>
-			<input class="u-full-width" type="text" data-bind="recipient" data-bind-key="death_year" value="<%= model.get('recipient') ? model.get('recipient').death_year : '' %>" id="recipientDeathYearInput">
-		</div>
-
-	</div>
-
-	<div class="row">
-		<div class="twelve columns">
-			<label for="contentInput">Content:</label>
-			<textarea id="contentInput" class="u-full-width" type="text" data-bind="content"><%= model.get('content') %></textarea>
-		</div>
 	</div>
 
 	<hr/>
@@ -626,6 +665,12 @@
 		</div>
 	</div>
 
+	<hr/>
+
+	<div class="image-list-container">
+		<div class="list-container grid-container"></div>
+	</div>
+
 	<div class="footer-toolbar">
 		<div class="container">
 			<div class="row">
@@ -637,14 +682,36 @@
 		</div>
 	</div>
 
-	<hr/>
+</script>
+
+<script type="text/template" id="combineDocumentsViewTemplate">
+
+	<div class="row">
+		<div class="twelve columns">
+			<h2 style="margin-bottom: 10px">Combine documents</h2>
+		</div>
+	</div>
 
 	<div class="image-list-container">
 		<div class="list-container grid-container"></div>
 	</div>
 
-</script>
+	<hr/>
 
+	<div class="document-view-container"></div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a class="button" onclick="javascript:history.go(-1)">Go back</a>
+					<a class="button button-primary u-pull-right save-button">Combine</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</script>
 
 <script type="text/template" id="loginTemplate">
 
