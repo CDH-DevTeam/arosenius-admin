@@ -57,6 +57,10 @@ define(function(require){
 						});
 					}, this), 1000);
 				}, this),
+				error: _.bind(function(model, response) {
+					console.log(response)
+					this.options.app.showMessage(response.responseJSON.error);
+				}, this),
 				type: 'PUT'
 			});
 		},
