@@ -29,6 +29,10 @@ define(function(require){
 			}
 		},
 
+		escapeValue: function(value) {
+			return value.split('"').join('&quot;');
+		},
+
 		initDataSelects: function() {
 			_.each(this.$el.find('.data-select-wrapper'), _.bind(function(el) {
 				console.log('data-select-wrapper')
@@ -108,7 +112,7 @@ define(function(require){
 
 				if ($(el).is('input') || $(el).is('textarea')) {
 					$(el).change(_.bind(function() {
-						var value = $(el).val();
+						var value = this.escapeValue($(el).val());
 						if (bindFormatter) {
 							if (bindFormatter == 'nl-array') {
 								value = _.uniq(value.split("\n"));
@@ -128,7 +132,7 @@ define(function(require){
 
 				if ($(el).is('select')) {
 					$(el).change(_.bind(function() {
-						assignValue(bindPropertyKey, bindProperty, $(el).val(), bindPropertyIndex);
+						assignValue(bindPropertyKey, bindProperty, this.escapeValue($(el).val()), bindPropertyIndex);
 					}, this));
 				}
 			}, this));
