@@ -35,7 +35,6 @@ define(function(require){
 
 		initDataSelects: function() {
 			_.each(this.$el.find('.data-select-wrapper'), _.bind(function(el) {
-				console.log('data-select-wrapper')
 				var optionsCollection = new Backbone.Collection();
 				optionsCollection.url = config.publicApiUrl+$(el).data('endpoint');
 				optionsCollection.on('reset', function() {
@@ -53,14 +52,12 @@ define(function(require){
 
 						if (selectedValue != '...') {
 							if ($(el).find('textarea').length > 0) {
-								console.log('update textarea');
 								$(el).find('textarea').val(selectedValue+'\n'+$(el).find('textarea').val());
 								setTimeout(function() {
 									$(el).find('textarea').change();
 								}, 100);								
 							}
 							else if ($(el).find('input').length > 0) {
-								console.log('update input');
 								$(el).find('input').val(selectedValue);
 								setTimeout(function() {
 									$(el).find('input').change();
@@ -77,13 +74,10 @@ define(function(require){
 		},
 
 		initBindings: function() {
-			console.log('initBindings');
 			var assignValue = _.bind(function(bindPropertyKey, bindProperty, value, bindPropertyIndex) {
 
 				if (bindPropertyKey != undefined) {
 					var attribute = this.model.get(bindProperty) ? this.model.get(bindProperty) : {};
-					console.log('bindPropertyIndex');
-					console.log(bindPropertyIndex);
 
 					if (bindPropertyKey.indexOf('.') > -1) {
 						this.objReference(bindPropertyIndex !== undefined ? attribute[bindPropertyIndex] : attribute, bindPropertyKey, value);
@@ -115,7 +109,14 @@ define(function(require){
 						var value = this.escapeValue($(el).val());
 						if (bindFormatter) {
 							if (bindFormatter == 'nl-array') {
-								value = _.uniq(value.split("\n"));
+								value = _.map(_.uniq(value.split("\n")), function(item) {
+									if (item.substr(item.length-1) == ' ') {
+										return item.slice(0, -1);
+									}
+									else {
+										return item;
+									}
+								});
 								if (value.length && value[0] == '') {
 									value = [];
 								}
