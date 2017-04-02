@@ -299,12 +299,12 @@
 				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/types">
 						<label for="typeInput">Document Type:</label>
-						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('type')? model.get('type').join('\n') : '' %></textarea>
+						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('type') && model.get('type').join ? model.get('type').join('\n') : model.get('type') ? model.get('type') : '' %></textarea>
 					</div>
 
 					<div class="data-select-wrapper" data-endpoint="/tags">
 						<label for="tagsInput">Tags:</label>
-						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('tags')? model.get('tags').join('\n') : '' %></textarea>
+						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('tags') ? model.get('tags').join('\n') : '' %></textarea>
 					</div>
 				</div>
 
