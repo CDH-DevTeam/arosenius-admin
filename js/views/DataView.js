@@ -30,7 +30,7 @@ define(function(require){
 		},
 
 		escapeValue: function(value) {
-			return value.split('"').join('&quot;');
+			return value.split('"').join('\"');
 		},
 
 		initDataSelects: function() {
