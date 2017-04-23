@@ -34,7 +34,7 @@ define(function(require){
 		},
 
 		htmlescapeValue: function(value) {
-			return value.split('"').join('&quot;');
+			return value ? value.split('"').join('&quot;') : '';
 		},
 
 		initDataSelects: function() {
