@@ -88,7 +88,8 @@ define(function(require){
 
 			this.$el.html(template({
 				model: this.model,
-				readOnly: this.options.readOnly
+				readOnly: this.options.readOnly,
+				escape: this.htmlescapeValue
 			}));
 
 			this.initBindings();

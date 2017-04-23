@@ -33,6 +33,10 @@ define(function(require){
 			return value.split('"').join('\"');
 		},
 
+		htmlescapeValue: function(value) {
+			return value.split('"').join('&quot;');
+		},
+
 		initDataSelects: function() {
 			_.each(this.$el.find('.data-select-wrapper'), _.bind(function(el) {
 				var optionsCollection = new Backbone.Collection();
@@ -107,6 +111,7 @@ define(function(require){
 				if ($(el).is('input') || $(el).is('textarea')) {
 					$(el).change(_.bind(function() {
 						var value = this.escapeValue($(el).val());
+						
 						if (bindFormatter) {
 							if (bindFormatter == 'nl-array') {
 								value = _.map(_.uniq(value.split("\n")), function(item) {
@@ -120,6 +125,9 @@ define(function(require){
 								if (value.length && value[0] == '') {
 									value = [];
 								}
+							}
+							if (bindFormatter == 'number') {
+								value = Number(value.split(',').join('.'));
 							}
 						}
 						if ($(el).attr('type') == 'checkbox') {

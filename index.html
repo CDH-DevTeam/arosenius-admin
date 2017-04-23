@@ -269,13 +269,13 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="titleInput">Title:</label>
-					<input class="u-full-width" type="text" data-bind="title" value="<%= model.get('title') %>" id="titleInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="title" value="<%= escape(model.get('title')) %>" id="titleInput" <%= readOnly ? 'readonly' : '' %>>
 
 				</div>
 
 				<div class="six columns">
 					<label for="subtitleInput">Subtitle:</label>
-					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= model.get('subtitle') %>" id="subtitleInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="subtitle" value="<%= escape(model.get('subtitle')) %>" id="subtitleInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 			</div>
 
@@ -365,22 +365,22 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="innerHeightInput">Inner height:</label>
-					<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.height" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.height : '' %>" id="innerHeightInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.height" data-formatter="number" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.height : '' %>" id="innerHeightInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 				<div class="six columns">
 					<label for="innerWidthInput">Inner width:</label>
-					<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="inner.width" data-formatter="number" value="<%= model.get('size') && model.get('size').inner ? model.get('size').inner.width : '' %>" id="innerWidthInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="six columns">
 					<label for="outerHeightInput">Outer height:</label>
-					<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.height" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.height : '' %>" id="outerHeightInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.height" data-formatter="number" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.height : '' %>" id="outerHeightInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 				<div class="six columns">
 					<label for="outerWidthInput">Outer width:</label>
-					<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="size" data-bind-key="outer.width" data-formatter="number" value="<%= model.get('size') && model.get('size').outer ? model.get('size').outer.width : '' %>" id="outerWidthInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 			</div>
 
