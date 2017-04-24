@@ -5,6 +5,8 @@ define(function(require){
 	var $ = require('jquery');
 	require('leaflet');
 
+	require('lib/lawnchair');
+
 	var DataView = require('views/DataView');
 	var DataModel = require('models/DataModel');
 
@@ -22,6 +24,14 @@ define(function(require){
 		getDocument: function(documentId) {
 			this.model = new DataModel();
 			this.options.documentId = documentId;
+
+			var view = this;
+			Lawnchair(function() {
+				this.exists(view.options.documentId, function(exists) {
+					view.localCopyExist = exists;
+				})
+			});
+
 			this.model.once('change', this.render, this);
 			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
 			this.model.fetch({
@@ -31,7 +41,14 @@ define(function(require){
 
 		events: {
 			'click .save-button': 'saveButtonClick',
-			'click .image-link': 'imageLinkClick'
+			'click .image-link': 'imageLinkClick',
+			'click .load-local-copy-button': 'localCopyButtonClick'
+		},
+
+		localCopyButtonClick: function() {
+			if (this.localCopyExist) {
+				this.loadLocalModel();
+			}
 		},
 
 		saveButtonClick: function() {
@@ -54,6 +71,28 @@ define(function(require){
 				}, this),
 				type: 'POST'
 			});
+
+			var view = this;
+
+			Lawnchair(function() {
+				this.save({
+					key: view.options.documentId,
+					document: view.model.toJSON()
+				});
+			});
+		},
+
+		loadLocalModel: function() {
+			view = this;
+
+			Lawnchair(function() {
+				this.get(view.options.documentId, function(data) {
+					if (data) {
+						view.model.clear().set(data.document);
+						view.render();
+					}
+				})
+			})
 		},
 
 		imageLinkClick: function(event) {
@@ -84,6 +123,7 @@ define(function(require){
 		},
 
 		render: function() {
+			console.log('localCopyExist: '+this.localCopyExist);
 			var template = _.template($("#documentViewTemplate").html());
 
 			this.$el.html(template({
@@ -100,6 +140,10 @@ define(function(require){
 
 			if (this.$el.find('.bundle-list')) {
 				this.initBundleList();
+			}
+
+			if (this.localCopyExist) {
+				this.$el.find('.load-local-copy-button').css('display', 'block');
 			}
 
 			return this;
