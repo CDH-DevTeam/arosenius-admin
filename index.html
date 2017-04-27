@@ -330,7 +330,7 @@
 
 				<div class="six columns">
 					<label for="ceatorInput">Creator:</label>
-					<input class="u-full-width" type="text" data-bind="creator" value="<%= model.get('creator') %>" id="ceatorInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="creator" value="<%= escape(model.get('creator')) %>" id="ceatorInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 			</div>
 
@@ -341,7 +341,7 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="collMuseumInput">Museum:</label>
-					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= model.get('collection').museum %>" id="collMuseumInput" <%= readOnly ? 'readonly' : '' %>>
+					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= escape(model.get('collection').museum) %>" id="collMuseumInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 
 				<div class="six columns">
@@ -411,12 +411,12 @@
 			<div class="row">
 				<div class="six columns">
 					<label for="signatureInput">Signature:</label>
-					<input id="signatureInput" rows="10" class="u-full-width" type="text" data-bind="signature" value="<%= model.get('signature') %>" <%= readOnly ? 'readonly' : '' %> />
+					<input id="signatureInput" rows="10" class="u-full-width" type="text" data-bind="signature" value="<%= escape(model.get('signature')) %>" <%= readOnly ? 'readonly' : '' %> />
 				</div>
 
 				<div class="six columns">
 					<label for="inscriptionInput">Inscription/påskrift:</label>
-					<input id="inscriptionInput" rows="10" class="u-full-width" type="text" data-bind="inscription" value="<%= model.get('inscription') %>" <%= readOnly ? 'readonly' : '' %> />
+					<input id="inscriptionInput" rows="10" class="u-full-width" type="text" data-bind="inscription" value="<%= escape(model.get('inscription')) %>" <%= readOnly ? 'readonly' : '' %> />
 				</div>
 			</div>
 
