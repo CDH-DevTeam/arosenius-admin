@@ -261,7 +261,7 @@
 
 			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
 			<%= model.get('subtitle') && model.get('subtitle') != '' ? '<h5>'+model.get('subtitle')+'</h5>' : '' %>
-
+			<div><strong>Nr.</strong> <%= model.get('insert_id') %>, <a href="http://aroseniusarkivet.org/arosenius-archive-gui/www/#/image/<%= model.get('id') %>" target="_blank">Arkiv</a></div>
 		</div>
 	</div>
 
