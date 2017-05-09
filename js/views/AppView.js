@@ -28,8 +28,8 @@ define(function(require){
 					trigger: true
 				});
 			}, this));
-			this.router.on('route:documents', _.bind(function(page, museum, type, searchQuery) {
-				this.showDocumentsListView(page, museum, type, searchQuery);
+			this.router.on('route:documents', _.bind(function(page, museum, type, searchQuery, insertId) {
+				this.showDocumentsListView(page, museum, type, searchQuery, insertId);
 			}, this));
 			this.router.on('route:document', _.bind(function(documentId) {
 				this.showDocumentView(documentId);
@@ -56,7 +56,7 @@ define(function(require){
 			}, this), 1500);
 		},
 
-		showDocumentsListView: function(page, museum, type, searchQuery) {
+		showDocumentsListView: function(page, museum, type, searchQuery, insertId) {
 			console.log('page :'+page);
 			if (this.currentView != 'DocumentsListView') {
 				this.currentView = 'DocumentsListView';
@@ -73,6 +73,7 @@ define(function(require){
 					museum: museum == undefined ? '' : museum,
 					type: type == undefined ? '' : type,
 					searchQuery: searchQuery == undefined ? '' : searchQuery,
+					insertId: insertId == undefined ? '' : insertId,
 					app: this
 				});
 			}
@@ -81,9 +82,10 @@ define(function(require){
 				this.mainView.options.museum = museum;
 				this.mainView.options.type = type;
 				this.mainView.options.searchQuery = searchQuery;
+				this.mainView.options.insertId = insertId;
 				this.mainView.updateOptions();
 
-				this.mainView.collection.getPage(page == undefined ? 1 : page, museum, type, searchQuery);
+				this.mainView.collection.getPage(page == undefined ? 1 : page, museum, type, searchQuery, insertId);
 			}
 		},
 

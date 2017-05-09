@@ -1,4 +1,4 @@
-@import "normalize.css";
+f@import "normalize.css";
 @import "skeleton.css";
 @import "tabs.css";
 @import "leaflet.css";
@@ -287,7 +287,6 @@ textarea {
 			background-color: #fff;
 
 			text-align: center;
-			font-weight: bold;
 		}
 	}
 }
@@ -351,6 +350,10 @@ input:read-only, input:-moz-read-only, textarea:read-only, textarea:-moz-read-on
 	background: #ccc;
 }
 
+input.short-input {
+	max-width: 70px;
+}
+
 .frame-container {
 	padding: 10px;
 	margin-bottom: 15px;
@@ -362,7 +365,7 @@ input:read-only, input:-moz-read-only, textarea:read-only, textarea:-moz-read-on
 }
 
 .list-container {
-	.image-number {
+	.image-number, .document-id {
 		float: right;
 
 		width: 25px;
@@ -375,6 +378,10 @@ input:read-only, input:-moz-read-only, textarea:read-only, textarea:-moz-read-on
 		background-color: #fff;
 
 		text-align: center;
-		font-weight: bold;
+	}
+
+	.image-number {
+		top: 40px;
+		opacity: 0.5;
 	}
 }

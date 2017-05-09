@@ -111,6 +111,7 @@
 	<% _.each(models, function(model) { %>
 		<tr data-id="<%= model.get('id') %>">
 			<td><input data-id="<%= model.get('id') %>" class="item-check" type="checkbox"/></td>
+			<td><strong><%= model.get('insert_id') %></strong></td>
 			<td>
 				<a class="row-name" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %>"><%= model.get('title') %></a>
 				<% if (model.get('images') && model.get('images').length > 0) {%>
@@ -135,8 +136,9 @@
 				<thead>
 					<tr>
 						<th width="5%"><div class="check-all"></div></th>
+						<th width="5%"></th>
 						<th width="35%"><a class="column-sort" href="#" data-sort="name">Title</a></th>
-						<th width="25%"><a class="column-sort" href="#" data-sort="subtitle">Subtitle</a></th>
+						<th width="20%"><a class="column-sort" href="#" data-sort="subtitle">Subtitle</a></th>
 						<th width="10%"><a class="column-sort" href="#" data-sort="type">Type</a></th>
 						<th width="25%"><a class="column-sort" href="#" data-sort="museum">Museum</a></th>
 					</tr>
@@ -170,6 +172,7 @@
 <!--						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> dokumenter i en ny bundel</a>-->
 						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Kombinera <span class="checked-number"></span> bilder</a>
 					</div>
+					<input type="text" class="insert-id-input u-pull-right toolbar-control short-input" placeholder="Nummer">
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
 						<option value="all">All museums</option>
@@ -193,6 +196,8 @@
 			<% } else if (!hideCheckBoxes) { %>
 				<input data-id="<%= model.get('id') %>" type="checkbox" class="item-check" />
 			<% } %>
+
+			<div class="document-id"><%= model.get('insert_id') %></div>
 
 			<% if (model.get('images') && model.get('images').length > 0) {%>
 				<div class="image-number"><%= model.get('images').length %></div>
@@ -235,6 +240,7 @@
 <!--						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> dokumenter i en ny bundel</a>-->
 						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Kombinera <span class="checked-number"></span> bilder</a>
 					</div>
+					<input type="text" class="insert-id-input u-pull-right toolbar-control short-input" placeholder="Nummer">
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
 						<option value="all">All museums</option>
@@ -281,10 +287,14 @@
 
 			<div class="row">
 
-				<div class="six columns">
+				<div class="twelve columns">
 					<label for="descriptionInput">Description:</label>
-					<textarea id="descriptionInput" class="u-full-width" type="text" data-bind="description" <%= readOnly ? 'readonly' : '' %>><%= model.get('description') %></textarea>
+					<textarea id="descriptionInput" class="u-full-width" style="height: 300px" type="text" data-bind="description" <%= readOnly ? 'readonly' : '' %>><%= model.get('description') %></textarea>
 				</div>
+
+			</div>
+
+			<div class="row">
 
 				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/genres">
@@ -293,20 +303,16 @@
 					</div>
 				</div>
 
-			</div>
-
-			<div class="row">
 				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/types">
 						<label for="typeInput">Document Type:</label>
 						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('type') && model.get('type').join ? model.get('type').join('\n') : model.get('type') ? model.get('type') : '' %></textarea>
 					</div>
-
-					<div class="data-select-wrapper" data-endpoint="/tags">
-						<label for="tagsInput">Tags:</label>
-						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('tags') ? model.get('tags').join('\n') : '' %></textarea>
-					</div>
 				</div>
+
+			</div>
+
+			<div class="row">
 
 				<div class="six columns">
 
@@ -314,7 +320,19 @@
 						<label for="personsInput">Persons:</label>
 						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="persons" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('persons')? model.get('persons').join('\n') : '' %></textarea>
 					</div>
+				</div>
 
+				<div class="six columns">
+					<div class="data-select-wrapper" data-endpoint="/tags">
+						<label for="tagsInput">Tags:</label>
+						<textarea id="tagsInput" class="u-full-width textarea-list" type="text" data-bind="tags" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('tags') ? model.get('tags').join('\n') : '' %></textarea>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="six columns">
 					<div class="data-select-wrapper" data-endpoint="/places">
 						<label for="placesInput">Places:</label>
 						<textarea id="placesInput" class="u-full-width textarea-list" type="text" data-bind="places" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('places')? model.get('places').join('\n') : '' %></textarea>

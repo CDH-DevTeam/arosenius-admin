@@ -29,8 +29,11 @@ define(function(require){
 			else if (this.options.documentIds != undefined) {
 				this.collection.byIDs(this.options.documentIds, 0, this.options.showAll);
 			}
+			else if (this.options.insertId != undefined) {
+				this.collection.getPage(null, null, null, null, this.options.insertId);
+			}
 			else {
-				this.collection.getPage(this.options.page, this.options.museum, this.options.type, this.options.searchQuery);
+				this.collection.getPage(this.options.page, this.options.museum, this.options.type, this.options.searchQuery, this.options.insertId);
 			}
 
 			if (this.viewMode == 'grid') {
@@ -63,11 +66,13 @@ define(function(require){
 					var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
 					var selectedType = this.$el.find('.search-type-select').find(":selected").val();
 					var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
+					var insertId = this.$el.find('.footer-toolbar .insert-id-input').val();
 
 					this.options.app.router.navigate('documents/page/'+(Number(this.collection.currentPage)-1)+
 						(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
 						(selectedType != 'all' ? '/type/'+selectedType : '')+
-						(searchQuery != '' ? '/search/'+searchQuery : ''),
+						(searchQuery != '' ? '/search/'+searchQuery : '')+
+						(insertId != '' ? '/insert_id/'+insertId : ''),
 					{
 						trigger: true
 					});
@@ -77,11 +82,13 @@ define(function(require){
 				var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
 				var selectedType = this.$el.find('.search-type-select').find(":selected").val();
 				var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
+				var insertId = this.$el.find('.footer-toolbar .insert-id-input').val();
 
 				this.options.app.router.navigate('documents/page/'+(Number(this.collection.currentPage)+1)+
 					(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
 					(selectedType != 'all' ? '/type/'+selectedType : '')+
-					(searchQuery != '' ? '/search/'+searchQuery : ''),
+					(searchQuery != '' ? '/search/'+searchQuery : '')+
+					(insertId != '' ? '/insert_id/'+insertId : ''),
 				{
 					trigger: true
 				});
@@ -148,8 +155,9 @@ define(function(require){
 			var selectedMuseum = this.$el.find('.search-museum-select').find(":selected").val();
 			var selectedType = this.$el.find('.search-type-select').find(":selected").val();
 			var searchQuery = this.$el.find('.footer-toolbar .search-input').val();
+			var insertId = this.$el.find('.footer-toolbar .insert-id-input').val();
 
-			if (selectedMuseum == 'all' && selectedType == 'all' && searchQuery == '') {
+			if (selectedMuseum == 'all' && selectedType == 'all' && searchQuery == '' && insertId == '') {
 				this.collection.getPage(1);
 
 				this.options.app.router.navigate('documents/page/1', {
@@ -160,7 +168,8 @@ define(function(require){
 				this.options.app.router.navigate('documents/page/1'+
 					(selectedMuseum != 'all' ? '/museum/'+selectedMuseum : '')+
 					(selectedType != 'all' ? '/type/'+selectedType : '')+
-					(searchQuery != '' ? '/search/'+searchQuery : ''),
+					(searchQuery != '' ? '/search/'+searchQuery : '')+
+					(insertId != '' ? '/insert_id/'+insertId : ''),
 				{
 					trigger: true
 				});
@@ -170,7 +179,7 @@ define(function(require){
 		afterRenderUI: function() {
 			this.$el.find('.floating-toolbar .viewmode-button').click(_.bind(this.viewModeClick, this));
 
-			this.$el.find('.footer-toolbar .search-input').keydown(_.bind(function(event) {
+			this.$el.find('.footer-toolbar .search-input, .footer-toolbar .insert-id-input').keydown(_.bind(function(event) {
 				if (event.keyCode == 13) {
 					this.uiSearch();
 				}

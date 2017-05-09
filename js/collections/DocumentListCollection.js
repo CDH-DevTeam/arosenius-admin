@@ -55,11 +55,12 @@ define(function(require){
 			});
 		},
 
-		getPage: function(page, museum, type, searchQuery) {
+		getPage: function(page, museum, type, searchQuery, insertId) {
 			this.currentPage = page;
 
 			var searchParams = {
-				page: this.currentPage
+				page: this.currentPage,
+				sort: 'insert_id'
 			};
 
 			if (museum) {
@@ -70,6 +71,9 @@ define(function(require){
 			}
 			if (searchQuery) {
 				searchParams['search'] = searchQuery;
+			}
+			if (insertId) {
+				searchParams['insert_id'] = insertId;
 			}
 
 			this.fetch({
