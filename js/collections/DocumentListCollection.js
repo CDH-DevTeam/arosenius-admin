@@ -58,6 +58,10 @@ define(function(require){
 		getPage: function(page, museum, type, searchQuery, insertId) {
 			this.currentPage = page;
 
+			console.log('DocumentListCollection: getPage');
+
+			console.log('museum: '+museum);
+
 			var searchParams = {
 				page: this.currentPage,
 				sort: 'insert_id'

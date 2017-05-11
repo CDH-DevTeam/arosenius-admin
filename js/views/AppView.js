@@ -57,8 +57,10 @@ define(function(require){
 		},
 
 		showDocumentsListView: function(page, museum, type, searchQuery, insertId) {
-			console.log('page :'+page);
+			console.log('AppView: showDocumentsListView');
+			console.log('museum: '+museum);
 			if (this.currentView != 'DocumentsListView') {
+				console.log('here');
 				this.currentView = 'DocumentsListView';
 
 				var DocumentsListView = require('views/DocumentsListView');
@@ -70,10 +72,10 @@ define(function(require){
 					el: this.$el.find('.view-container'),
 					router: this.router,
 					page: page == undefined ? 1 : page,
-					museum: museum == undefined ? '' : museum,
-					type: type == undefined ? '' : type,
-					searchQuery: searchQuery == undefined ? '' : searchQuery,
-					insertId: insertId == undefined ? '' : insertId,
+					museum: museum == undefined ? null : museum,
+					type: type == undefined ? null : type,
+					searchQuery: searchQuery == undefined ? null : searchQuery,
+					insertId: insertId == undefined ? null : insertId,
 					app: this
 				});
 			}

@@ -17,6 +17,9 @@ define(function(require){
 		initialize: function(options) {
 			this.options = options;
 
+			console.log('DocumentsListView: initialize');
+			console.log(this.options);
+
 			this.viewMode = this.options.viewMode || localStorage.viewMode || 'list';
 
 			this.collection = new DocumentListCollection();
@@ -24,15 +27,19 @@ define(function(require){
 			this.collection.metadata.on('change', this.updateMetadata, this);
 
 			if (this.options.bundle != undefined) {
+				console.log('bundle')
 				this.collection.byBundle(this.options.bundle, 0, this.options.showAll);
 			}
 			else if (this.options.documentIds != undefined) {
+				console.log('documentIds')
 				this.collection.byIDs(this.options.documentIds, 0, this.options.showAll);
 			}
 			else if (this.options.insertId != undefined) {
+				console.log('insertId')
 				this.collection.getPage(null, null, null, null, this.options.insertId);
 			}
 			else {
+				console.log('here');
 				this.collection.getPage(this.options.page, this.options.museum, this.options.type, this.options.searchQuery, this.options.insertId);
 			}
 
