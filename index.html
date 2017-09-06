@@ -421,8 +421,10 @@
 				</div>
 
 				<div class="six columns">
-					<label for="exhibitionsInput">Exhibitions:</label>
-					<textarea id="exhibitionsInput" rows="10" class="u-full-width" type="text" data-bind="exhibitions" <%= readOnly ? 'readonly' : '' %>><%= model.get('exhibitions') %></textarea>
+					<div class="data-select-wrapper" data-endpoint="/exhibitions">
+						<label for="exhibitionsInput">Exhibitions:</label>
+						<textarea id="exhibitionsInput" class="u-full-width textarea-list" type="text" data-bind="exhibitions" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('exhibitions') && model.get('exhibitions').join ? model.get('exhibitions').join('\n') : model.get('exhibitions') ? model.get('exhibitions') : '' %></textarea>
+					</div>
 				</div>
 			</div>
 
