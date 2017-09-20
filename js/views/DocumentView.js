@@ -54,7 +54,7 @@ define(function(require){
 		saveButtonClick: function() {
 			if (this.model.get('images') && this.model.get('images').length > 0) {
 				var sortedImages = _.sortBy(this.model.get('images'), function(image) {
-					return image.page.order || 0;
+					return image.page && image.page.order || 0;
 				});
 
 				this.model.set({
