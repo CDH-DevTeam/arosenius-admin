@@ -539,13 +539,13 @@
 
 						<div class="six columns">
 							<label for="pageNumberInput<%= index %>">Page number:</label>
-							<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.number" value="<%= image.page.number %>" id="pageNumberInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
+							<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.number" value="<%= image.page && image.page.number ? image.page.number : '' %>" id="pageNumberInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
 						</div>
 
 						<div class="six columns">
 							<div class="data-select-wrapper" data-endpoint="/pagetypes">
 								<label for="pageSideInput<%= index %>">Page type:</label>
-								<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.side" value="<%= image.page.side %>" id="pageSideInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
+								<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.side" value="<%= image.page && image.page.side ? image.page.side : '' %>" id="pageSideInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
 							</div>
 						</div>
 
@@ -555,7 +555,7 @@
 
 						<div class="six columns">
 							<label for="orderInput<%= index %>">Order:</label>
-							<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.order" value="<%= image.page.order %>" id="orderInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
+							<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.order" value="<%= image.page && image.page.order ? image.page.order : '' %>" id="orderInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
 						</div>
 
 					</div>
