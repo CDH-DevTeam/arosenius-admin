@@ -543,7 +543,7 @@
 						</div>
 
 						<div class="six columns">
-							<div class="data-select-wrapper" data-endpoint="/pagetypes">
+							<div class="data-select-wrapper" data-endpoint="/pagetypes" data-options="front,back,colortarget,unpublished">
 								<label for="pageSideInput<%= index %>">Page type:</label>
 								<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="page.side" value="<%= image.page && image.page.side ? image.page.side : '' %>" id="pageSideInput<%= index %>" <%= readOnly ? 'readonly' : '' %>>
 							</div>

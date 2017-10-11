@@ -38,42 +38,58 @@ define(function(require){
 		},
 
 		initDataSelects: function() {
+			var initSelectControl = function(el, options) {
+				var selectEl = $('<select class="data-select"><option>...</option>'+_.map(
+					_.filter(options, function(model) {
+						var value = model.get && model.get('value') || model;
+
+						return value != '';
+					}), function(model) {
+
+					var value = model.get && model.get('value') || model;
+					return '<option>'+value+'</option>';
+				}).join('')+'</select>');
+
+				$(el).append(selectEl);
+
+				selectEl.on('change', function(event) {
+					var selectedValue = selectEl.find(":selected").text();
+
+					if (selectedValue != '...') {
+						if ($(el).find('textarea').length > 0) {
+							$(el).find('textarea').val(selectedValue+'\n'+$(el).find('textarea').val());
+							setTimeout(function() {
+								$(el).find('textarea').change();
+							}, 100);								
+						}
+						else if ($(el).find('input').length > 0) {
+							$(el).find('input').val(selectedValue);
+							setTimeout(function() {
+								$(el).find('input').change();
+							}, 100);								
+						}
+						selectEl.val('...');
+					}
+				});
+			}
+
 			_.each(this.$el.find('.data-select-wrapper'), _.bind(function(el) {
 				var optionsCollection = new Backbone.Collection();
-				optionsCollection.url = config.publicApiUrl+$(el).data('endpoint');
-				optionsCollection.on('reset', function() {
-					var selectEl = $('<select class="data-select"><option>...</option>'+_.map(
-						_.filter(optionsCollection.models, function(model) {
-							return model.get('value') != '';
-						}), function(model) {
-						return '<option>'+model.get('value')+'</option>';
-					}).join('')+'</select>');
+				if ($(el).data('options')) {
+					var options = $(el).data('options').split(',');
+					console.log(options);
 
-					$(el).append(selectEl);
-	
-					selectEl.on('change', function(event) {
-						var selectedValue = selectEl.find(":selected").text();
-
-						if (selectedValue != '...') {
-							if ($(el).find('textarea').length > 0) {
-								$(el).find('textarea').val(selectedValue+'\n'+$(el).find('textarea').val());
-								setTimeout(function() {
-									$(el).find('textarea').change();
-								}, 100);								
-							}
-							else if ($(el).find('input').length > 0) {
-								$(el).find('input').val(selectedValue);
-								setTimeout(function() {
-									$(el).find('input').change();
-								}, 100);								
-							}
-							selectEl.val('...');
-						}
+					initSelectControl(el, options);
+				}
+				else {
+					optionsCollection.url = config.publicApiUrl+$(el).data('endpoint');
+					optionsCollection.on('reset', function() {
+						initSelectControl(el, optionsCollection.models);
 					});
-				});
-				optionsCollection.fetch({
-					reset: true
-				});
+					optionsCollection.fetch({
+						reset: true
+					});
+				}
 			}, this));
 		},
 
