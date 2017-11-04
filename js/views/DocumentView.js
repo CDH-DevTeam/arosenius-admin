@@ -18,10 +18,14 @@ define(function(require){
 		initialize: function(options) {
 			this.options = options;
 
+			this.waitingForDeleteConfirm = false;
+
 			this.getDocument(this.options.documentId);
 		},
 
 		getDocument: function(documentId) {
+			this.waitingForDeleteConfirm = false;
+
 			this.model = new DataModel();
 			this.options.documentId = documentId;
 
@@ -41,6 +45,7 @@ define(function(require){
 
 		events: {
 			'click .save-button': 'saveButtonClick',
+			'click .delete-button': 'deleteButtonClick',
 			'click .image-link': 'imageLinkClick',
 			'click .load-local-copy-button': 'localCopyButtonClick'
 		},
@@ -80,6 +85,19 @@ define(function(require){
 					document: view.model.toJSON()
 				});
 			});
+		},
+
+		deleteButtonClick: function() {
+			if (!this.waitingForDeleteConfirm) {
+				this.waitingForDeleteConfirm = true;
+
+				this.$el.find('.delete-button').text('Click again if you are sure!');
+			}
+			else {
+				this.model.set('deleted', true);
+
+				this.saveButtonClick();
+			}
 		},
 
 		loadLocalModel: function() {

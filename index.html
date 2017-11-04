@@ -109,7 +109,7 @@
 <script type="text/template" id="documentListTemplate">
 
 	<% _.each(models, function(model) { %>
-		<tr data-id="<%= model.get('id') %>">
+		<tr data-id="<%= model.get('id') %>" style="<%= model.get('deleted') ? 'background: #ccc; opacity: 0.5' : '' %>">
 			<td><input data-id="<%= model.get('id') %>" class="item-check" type="checkbox"/></td>
 			<td><strong><%= model.get('insert_id') %></strong></td>
 			<td>
@@ -189,7 +189,7 @@
 <script type="text/template" id="documentGridTemplate">
 
 	<% _.each(models, function(model, index) { %>
-		<a class="grid-item" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %> data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= (model.get('images') && model.get('images').length > 0 ? model.get('images')[0].image : model.get('image'))+'.jpg' %>')">
+		<a class="grid-item" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %> data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= (model.get('images') && model.get('images').length > 0 ? model.get('images')[0].image : model.get('image'))+'.jpg' %>'); <%= model.get('deleted') ? 'opacity: 0.2' : '' %>">
 
 			<% if (showRadioBoxes) { %>
 				<input data-id="<%= model.get('id') %>" type="radio" name="selected-document" class="item-check" <%= index == 0 ? 'checked="checked"' : '' %> />
@@ -270,7 +270,16 @@
 	<div class="row">
 		<div class="nine columns">
 
-			<label><input type="checkbox" data-bind="published" <%= model.get('published') ? 'checked' : '' %>  <%= readOnly ? 'disabled="disabled"' : '' %>/> Published</label>
+			<div class="row">
+				<div class="six columns">
+					<label><input type="checkbox" data-bind="published" <%= model.get('published') ? 'checked' : '' %>  <%= readOnly ? 'disabled="disabled"' : '' %>/> Published</label>
+				</div>
+				<% if (model.get('deleted')) { %>
+					<div class="six columns">
+						<label class="u-pull-right"><input type="checkbox" data-bind="deleted" <%= model.get('deleted') ? 'checked' : '' %>  <%= readOnly ? 'disabled="disabled"' : '' %>/> Deleted</label>
+					</div>
+				<% } %>
+			</div>
 
 			<div class="row">
 				<div class="six columns">
@@ -618,6 +627,7 @@
 				<div class="twelve columns">
 					<a class="button" onclick="javascript:history.go(-1)">Go back</a>
 					<a class="button button-primary u-pull-right save-button">Save</a>
+					<a class="button button-primary u-pull-right delete-button" style="margin-right: 10px; background: #ff7800; border-color: #e67108;">Delete</a>
 					<a class="button u-pull-right load-local-copy-button" style="display: none; margin-right: 10px;">Öppna lokal kopia</a>
 				</div>
 			</div>
