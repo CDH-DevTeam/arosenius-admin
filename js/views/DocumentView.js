@@ -88,16 +88,9 @@ define(function(require){
 		},
 
 		deleteButtonClick: function() {
-			if (!this.waitingForDeleteConfirm) {
-				this.waitingForDeleteConfirm = true;
+			this.model.set('deleted', true);
 
-				this.$el.find('.delete-button').text('Click again if you are sure!');
-			}
-			else {
-				this.model.set('deleted', true);
-
-				this.saveButtonClick();
-			}
+			this.saveButtonClick();
 		},
 
 		loadLocalModel: function() {
