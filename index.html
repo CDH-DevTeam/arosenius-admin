@@ -256,12 +256,17 @@
 
 <script type="text/template" id="documentViewTemplate">
 
+	<!--<div class="navigation-buttons floating-toolbar">
+		<a href="" class="toolbar-item prev">&lt;</a>
+		<a href="" class="toolbar-item next">&gt;</a>
+	</div>-->
+
 	<div class="row">
 		<div class="twelve columns">
 
 			<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
 			<%= model.get('subtitle') && model.get('subtitle') != '' ? '<h5>'+model.get('subtitle')+'</h5>' : '' %>
-			<div><strong>Nr.</strong> <%= model.get('insert_id') %>, <a href="http://aroseniusarkivet.org/#/image/<%= model.get('id') %>" target="_blank">Arkiv</a></div>
+			<div><strong>Nr.</strong> <%= model.get('insert_id') %>, <a href="http://aroseniusarkivet.org/#/image/<%= model.get('id') %>" target="_blank">Arkiv</a>, <a href="http://cdh-vir-1.it.gu.se:8004/document/<%= model.get('id') %>" target="_blank">Metadata</a></div>
 		</div>
 	</div>
 
@@ -626,6 +631,9 @@
 			<div class="row">
 				<div class="twelve columns">
 					<a class="button" onclick="javascript:history.go(-1)">Go back</a>
+					<span style="display: inline-block; width: 50px"></span>
+					<a class="button prev-button">&lt; Prev</a>
+					<a class="button next-button">Next &gt;</a>
 					<a class="button button-primary u-pull-right save-button">Save</a>
 					<a class="button button-primary u-pull-right delete-button" style="margin-right: 10px; background: #ff7800; border-color: #e67108;">Delete</a>
 					<a class="button u-pull-right load-local-copy-button" style="display: none; margin-right: 10px;">Öppna lokal kopia</a>

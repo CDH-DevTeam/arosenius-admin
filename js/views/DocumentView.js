@@ -133,6 +133,24 @@ define(function(require){
 			bundleCollection.byBundle(this.model.get('bundle'), null, true);
 		},
 
+		initNavButtons: function() {
+			console.log('initNavButtons')
+			console.log(this.model.get('insert_id'))
+			var prevModel = new Backbone.Model();
+			prevModel.url = config.publicApiUrl+'/prev/'+this.model.get('insert_id');
+			prevModel.on('change', _.bind(function() {
+				this.$el.find('.prev-button').attr('href', '#document/'+prevModel.get('id'));
+			}, this));
+			prevModel.fetch();
+
+			var nextModel = new Backbone.Model();
+			nextModel.url = config.publicApiUrl+'/next/'+this.model.get('insert_id');
+			nextModel.on('change', _.bind(function() {
+				this.$el.find('.next-button').attr('href', '#document/'+nextModel.get('id'));
+			}, this));
+			nextModel.fetch();
+		},
+
 		render: function() {
 			console.log('localCopyExist: '+this.localCopyExist);
 			var template = _.template($("#documentViewTemplate").html());
@@ -156,6 +174,8 @@ define(function(require){
 			if (this.localCopyExist) {
 				this.$el.find('.load-local-copy-button').css('display', 'block');
 			}
+
+			this.initNavButtons();
 
 			return this;
 		},

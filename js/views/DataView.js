@@ -77,7 +77,6 @@ define(function(require){
 				var optionsCollection = new Backbone.Collection();
 				if ($(el).data('options')) {
 					var options = $(el).data('options').split(',');
-					console.log(options);
 
 					initSelectControl(el, options);
 				}
