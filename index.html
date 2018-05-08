@@ -311,16 +311,16 @@
 			<div class="row">
 
 				<div class="six columns">
-					<div class="data-select-wrapper" data-endpoint="/genres">
-						<label for="personsInput">Genre:</label>
-						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="genre" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('genre')? model.get('genre').join('\n') : '' %></textarea>
+					<div class="data-select-wrapper" data-endpoint="/types">
+						<label for="typeInput"><!-- Previously: Document type -->Kategori:</label>
+						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('type') && model.get('type').join ? model.get('type').join('\n') : model.get('type') ? model.get('type') : '' %></textarea>
 					</div>
 				</div>
 
 				<div class="six columns">
-					<div class="data-select-wrapper" data-endpoint="/types">
-						<label for="typeInput">Document Type:</label>
-						<textarea id="typeInput" class="u-full-width textarea-list" type="text" data-bind="type" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('type') && model.get('type').join ? model.get('type').join('\n') : model.get('type') ? model.get('type') : '' %></textarea>
+					<div class="data-select-wrapper" data-endpoint="/genres">
+						<label for="personsInput"><!-- Previously: Genre -->Underkategori:</label>
+						<textarea id="personsInput" class="u-full-width textarea-list" type="text" data-bind="genre" data-formatter="nl-array" <%= readOnly ? 'readonly' : '' %>><%= model.get('genre')? model.get('genre').join('\n') : '' %></textarea>
 					</div>
 				</div>
 
