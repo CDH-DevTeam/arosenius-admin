@@ -355,12 +355,17 @@
 			</div>
 
 			<div class="row">
-				<div class="six columns">
-					<label for="dateInput">Date:</label>
-					<input class="u-full-width" type="text" data-bind="item_date_str" value="<%= model.get('item_date_str') %>" id="dateInput" <%= readOnly ? 'readonly' : '' %>>
+				<div class="four columns">
+					<label for="dateStrInput">Date (human readable):</label>
+					<input class="u-full-width" type="text" data-bind="item_date_str" value="<%= model.get('item_date_str') %>" id="dateStrInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
 
-				<div class="six columns">
+				<div class="four columns">
+					<label for="dateInput">Date (machine readable):</label>
+					<input class="u-full-width" type="text" data-bind="item_date_string" value="<%= model.get('item_date_string') %>" id="dateInput" <%= readOnly ? 'readonly' : '' %>>
+				</div>
+
+				<div class="four columns">
 					<label for="ceatorInput">Creator:</label>
 					<input class="u-full-width" type="text" data-bind="creator" value="<%= escape(model.get('creator')) %>" id="ceatorInput" <%= readOnly ? 'readonly' : '' %>>
 				</div>
