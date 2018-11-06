@@ -97,6 +97,7 @@
 				</div>
 				<div class="eight columns">
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
+					<a href="#document/new" class="button button-primary">Nytt</a>
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
 						<option value="all">All museums</option>
 					</select>
@@ -169,9 +170,11 @@
 				</div>
 				<div class="nine columns">
 					<div style="display: none" class="document-controls">
+	
 <!--						<a class="u-pull-left button button-primary bundle-button" style="margin-right: 10px">Lägg <span class="checked-number"></span> dokumenter i en ny bundel</a>-->
 						<a class="u-pull-left button button-primary combine-button" style="margin-right: 10px">Kombinera <span class="checked-number"></span> bilder</a>
 					</div>
+					<a href="#document/new" class="button button-primary">Nytt</a>
 					<input type="text" class="insert-id-input u-pull-right toolbar-control short-input" placeholder="Nr.">
 					<input type="text" class="search-input u-pull-right toolbar-control" placeholder="Search">
 					<select type="text" class="search-museum-select u-pull-right toolbar-control">
@@ -377,8 +380,11 @@
 
 			<div class="row">
 				<div class="six columns">
-					<label for="collMuseumInput">Museum:</label>
-					<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= escape(model.get('collection').museum) %>" id="collMuseumInput" <%= readOnly ? 'readonly' : '' %>>
+
+					<div class="data-select-wrapper" data-endpoint="/museums">
+						<label for="collMuseumInput">Museum:</label>
+						<input class="u-full-width" type="text" data-bind="collection" data-bind-key="museum" value="<%= escape(model.get('collection').museum) %>" id="collMuseumInput" <%= readOnly ? 'readonly' : '' %>>
+					</div>
 				</div>
 
 				<div class="six columns">
@@ -544,7 +550,12 @@
 
 				<% _.each(model.get('images'), function(image, index) { %>
 
-					<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= image.image+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= image.image+'.jpg' %>" class="archive-image"/></a><br/><%= image.image %> <a href="http://cdh-vir-1.it.gu.se:8004/images/<%= image.image+'.jpg' %>" target="_blank">View full size</a><br/><br/>
+					<a class="image-link" href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= image.image+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= image.image+'.jpg' %>" class="archive-image"/></a>
+					<div class="image-input">
+						<input class="u-full-width" type="text" data-bind="images" data-bind-index="<%= index %>" data-bind-key="image" value="<%= image.image ? image.image : '' %>" />
+						<button data-imageIndex="<%= index %>" class="button button-primary image-select-button">...</button>
+					</div>
+					<a href="http://cdh-vir-1.it.gu.se:8004/images/<%= image.image+'.jpg' %>" target="_blank">View full size</a><br/><br/>
 
 					<% if (image.color) { %>
 						<div class="color-list">
@@ -581,6 +592,8 @@
 					<hr/>
 
 				<% }) %>
+				<a class="button add-image-button">Add image</a>
+				<a class="button update-view-button">Update view</a>
 
 			<% } else { %>
 				<label>Image:</label>
@@ -767,6 +780,53 @@
 		</div>
 	</div>
 
+</script>
+
+<script type="text/template" id="imageListViewTemplate">
+	<div class="container">
+		<div class="row">
+
+			<div class="twelve columns">
+
+				<div class="list-container grid-container" style="padding-top: 20px; padding-bottom: 120px;">
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a class="button prev-button">&lt; Prev</a>
+					<a class="button next-button">Next &gt;</a>
+
+					<input type="text" id="searchInput" class="search-input" style="margin-left: 10px" placeholder="Search">
+
+					<a class="button button-primary close-button u-pull-right" style="margin-left: 10px">Stäng</a>
+
+					<span class="u-pull-right">
+						<input type="file" id="uploadInput" class="search-input">
+						<a class="button button-primary upload-button">Ladda upp</a>
+					</span>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="imageListTemplate">
+	<% _.each(models, function(model, index) { %>
+		<a class="item grid-item" href="#" data-image="<%= model.get('file') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('file') %>'); ">
+
+			<div class="item-title"><%= model.get('file') %></div>
+		</a>
+	<% }); %>
+
+	<div class="u-cf"></div>
 </script>
 
 <script type="text/template" id="loginTemplate">

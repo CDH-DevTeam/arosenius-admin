@@ -12,6 +12,8 @@ define(function(require){
 		initialize: function() {
 			this.render();
 
+			window.appView = this;
+
 			if (!authHelper.authenticated()) {
 				authHelper.login(this, _.bind(this.initializeReady, this));
 			}
@@ -32,6 +34,7 @@ define(function(require){
 				this.showDocumentsListView(page, museum, type, searchQuery, insertId);
 			}, this));
 			this.router.on('route:document', _.bind(function(documentId) {
+				console.log('document route')
 				this.showDocumentView(documentId);
 			}, this));
 			this.router.on('route:bundles', _.bind(function(page, museum, searchQuery) {
@@ -57,10 +60,7 @@ define(function(require){
 		},
 
 		showDocumentsListView: function(page, museum, type, searchQuery, insertId) {
-			console.log('AppView: showDocumentsListView');
-			console.log('museum: '+museum);
 			if (this.currentView != 'DocumentsListView') {
-				console.log('here');
 				this.currentView = 'DocumentsListView';
 
 				var DocumentsListView = require('views/DocumentsListView');

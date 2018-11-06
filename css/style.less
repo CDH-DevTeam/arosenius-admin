@@ -1,4 +1,4 @@
-f@import "normalize.css";
+@import "normalize.css";
 @import "skeleton.css";
 @import "tabs.css";
 @import "leaflet.css";
@@ -169,6 +169,26 @@ body {
 }
 
 .overlay-container {
+	.image-list {
+		position: fixed;
+
+		top: 20px;
+		left: 20px;
+		right: 20px;
+		bottom: 20px;
+
+		background: #fff;
+
+		overflow-x: hidden;
+		overflow-y: auto;
+
+		.footer-toolbar {
+			left: 20px;
+			right: 20px;
+			bottom: 20px;
+		}
+	}
+
 	.message {
 		position: fixed;
 
@@ -385,5 +405,22 @@ input.short-input {
 	.image-number {
 		top: 40px;
 		opacity: 0.5;
+	}
+}
+
+.image-input {
+	position: relative;
+
+	input {
+		padding-right: 40px;
+	}
+	
+	.image-select-button {
+		position: absolute;
+
+		top: 0;
+		right: 0;
+
+		padding: 0 13px;
 	}
 }

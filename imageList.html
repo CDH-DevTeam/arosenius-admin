@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<title>Arosenius Admin Image List</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div id="imageListView"></div>
+
+<script type="text/template" id="_imageListTemplate">
+	<div class="container">
+		<div class="row">
+
+			<div class="twelve columns">
+
+				<div class="list-container" style="padding-bottom: 120px">
+
+					<% _.each(models, function(model, index) { %>
+						<a class="item" href="#" data-image="<%= model.get('file') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('file') %>'); ">
+							<%= model.get('file') %>
+						</a>
+					<% }); %>
+
+					<div class="u-cf"></div>
+
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<input type="text" id="searchInput" class="search-input" placeholder="Search">
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="imageListViewTemplate">
+	<div class="container">
+		<div class="row">
+
+			<div class="twelve columns">
+
+				<div class="list-container grid-container" style="padding-top: 20px; padding-bottom: 120px;">
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="footer-toolbar">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a class="button prev-button">&lt; Prev</a>
+					<a class="button next-button">Next &gt;</a>
+
+					<input type="text" id="searchInput" class="search-input" style="margin-left: 10px" placeholder="Search">
+
+					<span class="u-pull-right">
+						<input type="file" id="uploadInput" class="search-input">
+						<a class="button button-primary upload-button">Ladda upp</a>
+					</span>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="imageListTemplate">
+	<% _.each(models, function(model, index) { %>
+		<a class="item grid-item" href="#" data-image="<%= model.get('file') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('file') %>'); ">
+
+			<div class="item-title"><%= model.get('file') %></div>
+		</a>
+	<% }); %>
+
+	<div class="u-cf"></div>
+</script>
+
+<script src="js/lib/require.js" data-main="js/init.js?8"></script>
+</body>
+</html>

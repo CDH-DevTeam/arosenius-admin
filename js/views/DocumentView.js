@@ -8,11 +8,20 @@ define(function(require){
 	require('lib/lawnchair');
 
 	var DataView = require('views/DataView');
+	var ImageListView = require('views/ImageListView');
 	var DataModel = require('models/DataModel');
 
 	var config = require('config');
 
 	var authHelper = require('lib/auth.helper');
+
+	var museums = {
+		'Göteborgs universitetsbibliotek': 'GUB',
+		'Göteborgs konstmuseum': 'GKM',
+		'Nationalmuseum': 'NM',
+		'Privat samling': 'PRIV',
+		'Norrköpings konstmuseum': 'nkm'
+	}
 
 	return DataView.extend({
 		initialize: function(options) {
@@ -20,7 +29,17 @@ define(function(require){
 
 			this.waitingForDeleteConfirm = false;
 
-			this.getDocument(this.options.documentId);
+			if (this.options.documentId == 'new') {
+				console.log('create new')
+				this.newModel = true;
+				this.newDocument();
+			}
+			else {
+				this.newModel = false;
+				this.getDocument(this.options.documentId);
+			}
+
+			window.addEventListener('message', _.bind(this.windowMessageHandler, this), false);
 		},
 
 		getDocument: function(documentId) {
@@ -43,11 +62,95 @@ define(function(require){
 			});
 		},
 
+		newDocument: function() {
+			console.log('newDocument')
+			var hightestIdModel = new Backbone.Model();
+			hightestIdModel.url = config.publicApiUrl+'/highest_insert_id';
+
+			hightestIdModel.on('change', _.bind(function() {
+				this.model = new DataModel({
+					insert_id: hightestIdModel.get('highest_insert_id')+1,
+					title: 'Nytt',
+					collection: {
+						museum: ''
+					},
+					museum_int_id: '',
+					images: []
+				});
+				console.log(this.model)
+
+				this.render();
+			}, this));
+			hightestIdModel.fetch();
+		},
+
 		events: {
 			'click .save-button': 'saveButtonClick',
 			'click .delete-button': 'deleteButtonClick',
 			'click .image-link': 'imageLinkClick',
-			'click .load-local-copy-button': 'localCopyButtonClick'
+			'click .load-local-copy-button': 'localCopyButtonClick',
+			'click .add-image-button': 'addImageButtonClick',
+			'click .image-select-button': 'imageSelectButtonClick',
+			'click .update-view-button': 'render'
+		},
+
+		addImageButtonClick: function() {
+			var images = this.model.get('images');
+
+			images.push({
+				image: '',
+				page: {
+					number: '',
+					side: '',
+					order: ''
+				}
+			});
+
+			this.model.set('images, images');
+
+			this.render();
+		},
+
+		imageSelectButtonClick: function(event) {
+			console.log(event.target.dataset.imageindex)
+			this.imageSelectIndex = event.target.dataset.imageindex;
+			
+			this.options.app.$el.find('.overlay-container').html('<div class="image-overlay"><div id="imageList" class="image-list"></div<</div>');
+
+			this.imageListView = new ImageListView({
+				el: $('#imageList'),
+				onClose: _.bind(function() {
+					this.imageListView.destroy();
+
+					this.options.app.$el.find('.overlay-container').html('');
+				}, this)
+			});
+
+			$(document.body).addClass('has-overlay');
+		},
+
+		windowMessageHandler: function(event) {
+			console.log(event);
+			console.log(this)
+
+			if (!this.imageSelectIndex) {
+				return;
+			}
+
+			var images = this.model.get('images');
+
+			images[this.imageSelectIndex].image = event.data.split('.')[0];
+
+			this.model.set('images', images);
+
+			this.render();
+
+			if (this.imageSelectWindow) {
+				this.imageSelectWindow.close();
+			}
+
+			this.imageSelectWindow = undefined;
+			this.imageSelectIndex = undefined;
 		},
 
 		localCopyButtonClick: function() {
@@ -67,24 +170,43 @@ define(function(require){
 				});
 			}
 
-			this.model.url = config.apiUrl+'/document/'+this.options.documentId;
-			this.model.save(null, {
-				beforeSend: authHelper.sendAuthentication,
-				success: _.bind(function() {
-					this.render();
-					this.options.app.showMessage('Document entry saved.')
-				}, this),
-				type: 'POST'
-			});
+			if (this.newModel) {
+				var docId = museums[this.model.get('collection').museum]+'-'+(this.model.get('insert_id'));
 
-			var view = this;
+				this.model.set('id', docId);
 
-			Lawnchair(function() {
-				this.save({
-					key: view.options.documentId,
-					document: view.model.toJSON()
+				this.model.url = config.apiUrl+'/document/'+docId;
+
+				this.model.save(null, {
+					beforeSend: authHelper.sendAuthentication,
+					success: _.bind(function() {
+						this.render();
+						this.options.app.showMessage('Document entry saved.');
+						window.location.hash = '#document/'+docId;
+					}, this),
+					type: 'PUT'
 				});
-			});
+			}
+			else {
+				this.model.url = config.apiUrl+'/document/'+this.options.documentId;
+				this.model.save(null, {
+					beforeSend: authHelper.sendAuthentication,
+					success: _.bind(function() {
+						this.render();
+						this.options.app.showMessage('Document entry saved.')
+					}, this),
+					type: 'POST'
+				});
+
+				var view = this;
+
+				Lawnchair(function() {
+					this.save({
+						key: view.options.documentId,
+						document: view.model.toJSON()
+					});
+				});
+			}
 		},
 
 		deleteButtonClick: function() {

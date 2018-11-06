@@ -35,8 +35,10 @@ requirejs.config({
 
 require(['js/views/AppView.js'],function(AppView) {
 	$(function() {
-		window.appView = new AppView({
-			el: $('#appView')
-		});
+		if ($('#appView').length > 0) {
+			window.appView = new AppView({
+				el: $('#appView')
+			});
+		}
 	});
 });
