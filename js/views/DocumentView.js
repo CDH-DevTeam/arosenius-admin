@@ -38,8 +38,6 @@ define(function(require){
 				this.newModel = false;
 				this.getDocument(this.options.documentId);
 			}
-
-			window.addEventListener('message', _.bind(this.windowMessageHandler, this), false);
 		},
 
 		getDocument: function(documentId) {
@@ -123,34 +121,27 @@ define(function(require){
 					this.imageListView.destroy();
 
 					this.options.app.$el.find('.overlay-container').html('');
+
+					$(document.body).removeClass('has-overlay');
+				}, this),
+				onSelect: _.bind(function(image) {
+					var images = this.model.get('images');
+
+					images[this.imageSelectIndex].image = image.split('.')[0];
+
+					this.model.set('images', images);
+
+					this.render();
+
+					this.imageListView.destroy();
+
+					this.options.app.$el.find('.overlay-container').html('');
+
+					$(document.body).removeClass('has-overlay');
 				}, this)
 			});
 
 			$(document.body).addClass('has-overlay');
-		},
-
-		windowMessageHandler: function(event) {
-			console.log(event);
-			console.log(this)
-
-			if (!this.imageSelectIndex) {
-				return;
-			}
-
-			var images = this.model.get('images');
-
-			images[this.imageSelectIndex].image = event.data.split('.')[0];
-
-			this.model.set('images', images);
-
-			this.render();
-
-			if (this.imageSelectWindow) {
-				this.imageSelectWindow.close();
-			}
-
-			this.imageSelectWindow = undefined;
-			this.imageSelectIndex = undefined;
 		},
 
 		localCopyButtonClick: function() {

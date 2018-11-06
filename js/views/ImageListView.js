@@ -88,6 +88,8 @@ define(function(require){
 
 					if (data.success) {
 						this.listFilter = data.filename.split('.')[0];
+
+						this.$el.find('.search-input').val(this.listFilter);
 			
 						this.collection.fetch({
 							reset: true
@@ -104,10 +106,8 @@ define(function(require){
 		imageItemClickHandler: function(event) {
 			event.preventDefault();
 
-			console.log(event.target.dataset.image);
-
-			if (window.opener) {
-				window.opener.postMessage(event.target.dataset.image, '*');;
+			if (this.options.onSelect) {
+				this.options.onSelect(event.target.dataset.image);
 			}
 		},
 
