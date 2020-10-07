@@ -43,6 +43,8 @@ define(function(require) {
 						xhr.setRequestHeader('Authorization', ("Basic ".concat(btoa(token))));
 					}, this)
 				});
+				// Prevent submitting the form, which would just reload the page.
+				return false;
 			}, this));
 
 //			success();
