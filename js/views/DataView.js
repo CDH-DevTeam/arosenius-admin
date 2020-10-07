@@ -41,13 +41,12 @@ define(function(require){
 			var initSelectControl = function(el, options) {
 				var selectEl = $('<select class="data-select"><option>...</option>'+_.map(
 					_.filter(options, function(model) {
-						var value = model.get && model.get('value') || model;
-
-						return value != '';
+						return model.get && model.get('value') || typeof model === 'string';
 					}), function(model) {
-
-					var value = model.get && model.get('value') || model;
-					return '<option>'+value+'</option>';
+						var value = model.get && model.get('value') || model;
+						// Escape any HTML in the value.
+						value = $("<div>").text(value).html();
+						return '<option>'+value+'</option>';
 				}).join('')+'</select>');
 
 				$(el).append(selectEl);
