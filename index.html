@@ -206,7 +206,7 @@
 					id="documentGridTemplate">
 
 		<% _.each(models, function(model, index) { %>
-		<a class="grid-item" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %> data-id="<%= model.get('id') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= (model.get('images') && model.get('images').length > 0 ? model.get('images')[0].image : model.get('image'))+'.jpg' %>'); <%= model.get('deleted') ? 'opacity: 0.2' : '' %>">
+		<a class="grid-item" <%= enableLinks ? 'href="#document/'+model.get('id')+'"' : '' %> data-id="<%= model.get('id') %>" style="background-image: url('https://aroseniusarkivet.dh.gu.se/api/images/255x/<%= (model.get('images') && model.get('images').length > 0 ? model.get('images')[0].image : model.get('image'))+'.jpg' %>'); <%= model.get('deleted') ? 'opacity: 0.2' : '' %>">
 
 			<% if (showRadioBoxes) { %>
 				<input data-id="<%= model.get('id') %>" type="radio" name="selected-document" class="item-check" <%= index == 0 ? 'checked="checked"' : '' %> />
@@ -287,7 +287,7 @@
 				<h2 style="margin-bottom: 10px"><%= model.get('title') %></h2>
 				<%= model.get('subtitle') && model.get('subtitle') != '' ? '<h5>'+model.get('subtitle')+'</h5>' : '' %>
 				<div><strong>Nr.</strong> <%= model.get('insert_id') %>, <a href="http://aroseniusarkivet.org/#/image/<%= model.get('id') %>"
-						 target="_blank">Arkiv</a>, <a href="http://cdh-vir-1.it.gu.se:8004/document/<%= model.get('id') %>"
+						 target="_blank">Arkiv</a>, <a href="https://aroseniusarkivet.dh.gu.se/api/document/<%= model.get('id') %>"
 						 target="_blank">Metadata</a></div>
 			</div>
 		</div>
@@ -768,7 +768,7 @@
 				<% _.each(model.get('images'), function(image, index) { %>
 
 				<a class="image-link"
-					 href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= image.image+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= image.image+'.jpg' %>"
+					 href="https://aroseniusarkivet.dh.gu.se/api/images/1000x/<%= image.image+'.jpg' %>"><img src="https://aroseniusarkivet.dh.gu.se/api/images/600x/<%= image.image+'.jpg' %>"
 							 class="archive-image" /></a>
 				<div class="image-input">
 					<input class="u-full-width"
@@ -780,7 +780,7 @@
 					<button data-imageIndex="<%= index %>"
 									class="button button-primary image-select-button">...</button>
 				</div>
-				<a href="http://cdh-vir-1.it.gu.se:8004/images/<%= image.image+'.jpg' %>"
+				<a href="https://aroseniusarkivet.dh.gu.se/api/images/<%= image.image+'.jpg' %>"
 					 target="_blank">View full size</a><br /><br />
 
 				<div class="row">
@@ -839,8 +839,8 @@
 				<% } else { %>
 				<label>Image:</label>
 				<a class="image-link"
-					 href="http://cdh-vir-1.it.gu.se:8004/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="http://cdh-vir-1.it.gu.se:8004/images/600x/<%= model.get('image')+'.jpg' %>"
-							 class="archive-image" /></a><br /><%= model.get('image') %> <a href="http://cdh-vir-1.it.gu.se:8004/images/<%= model.get('image')+'.jpg' %>"
+					 href="https://aroseniusarkivet.dh.gu.se/api/images/1000x/<%= model.get('image')+'.jpg' %>"><img src="https://aroseniusarkivet.dh.gu.se/api/images/600x/<%= model.get('image')+'.jpg' %>"
+							 class="archive-image" /></a><br /><%= model.get('image') %> <a href="https://aroseniusarkivet.dh.gu.se/api/images/<%= model.get('image')+'.jpg' %>"
 					 target="_blank">View full size</a>
 				<% } %>
 
@@ -1034,7 +1034,7 @@
 	<script type="text/template"
 					id="imageListTemplate">
 		<% _.each(models, function(model, index) { %>
-		<a class="item grid-item" href="#" data-image="<%= model.get('file') %>" style="background-image: url('http://cdh-vir-1.it.gu.se:8004/images/255x/<%= model.get('file') %>'); ">
+		<a class="item grid-item" href="#" data-image="<%= model.get('file') %>" style="background-image: url('https://aroseniusarkivet.dh.gu.se/api/images/255x/<%= model.get('file') %>'); ">
 
 			<div class="item-title"><%= model.get('file') %></div>
 		</a>
